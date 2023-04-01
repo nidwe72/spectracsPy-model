@@ -1,2 +1,2 @@
 # spectracsPy-model
-models for spectrcsPy
+models for spectracsPy
