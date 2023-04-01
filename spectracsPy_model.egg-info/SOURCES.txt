@@ -1,0 +1,16 @@
+LICENSE
+README.md
+setup.py
+.idea/modules.xml
+.idea/spectracsPy-model.iml
+.idea/workspace.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/inspectionProfiles/profiles_settings.xml
+chromos/__init__.py
+chromos/spectracs/__init__.py
+chromos/spectracs/model/SpectrumSampleType.py
+chromos/spectracs/model/__init__.py
+spectracsPy_model.egg-info/PKG-INFO
+spectracsPy_model.egg-info/SOURCES.txt
+spectracsPy_model.egg-info/dependency_links.txt
+spectracsPy_model.egg-info/top_level.txt
