@@ -1,7 +1,7 @@
 
 from enum import Enum
 
-class SpectrumSampleType(Enum):
+class SpectrumSampleType(str,Enum):
     REFERENCE='REFERENCE'
     SAMPLE='SAMPLE'
     DARK='DARK'
