@@ -1,8 +1,12 @@
-from PySide6.QtCore import QObject
+from PySide6 import QtCore
 
-class SingletonQObject(QObject):
-    _instance = None
-    def __new__(cls, *args, **kwargs):
-        if not isinstance(cls._instance, cls):
-            cls._instance = QObject.__new__(cls, *args, **kwargs)
-        return cls._instance
+
+class SingletonQObject(type(QtCore.QObject), type):
+    def __init__(cls, name, bases, dict):
+        super().__init__(name, bases, dict)
+        cls.instance = None
+
+    def __call__(cls, *args, **kw):
+        if cls.instance is None:
+            cls.instance = super().__call__(*args, **kw)
+        return cls.instance
