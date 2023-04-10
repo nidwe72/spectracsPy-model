@@ -1,19 +1,16 @@
-from typing import List
+from typing import List, Dict
 
 from spectracs.model.spectral.SpectralWorkflowPhase import SpectralWorkflowPhase
 from spectracs.model.spectral.SpectralWorkflowPhaseType import SpectralWorkflowPhaseType
-from spectracs.model.spectral.SpectrumSampleType import SpectrumSampleType
+from spectracs.model.spectral.workflow.phase.setp.AcquireViewSpectralWorkflowStep import AcquireViewSpectralWorkflowStep
 
 
 class AcquireViewSpectralWorkflowPhase(SpectralWorkflowPhase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.setType(SpectralWorkflowPhaseType.ACQUIRE_VIEW)
+        self.setType(SpectralWorkflowPhaseType.ACQUIREMENT_VIEW)
 
-
-    def getSpectralSampleTypes(self)->List[str]:
-        result=[]
-        result.append(SpectrumSampleType.SAMPLE)
-        result.append(SpectrumSampleType.REFERENCE)
+    def getSteps(self)->Dict[str,AcquireViewSpectralWorkflowStep]:
+        result = super().getSteps()
         return result

@@ -8,12 +8,11 @@ from spectracs.model.spectral.workflow.phase.acquireView.AcquireViewSpectralWork
 
 class SpectralWorkflow:
     currentPhase: SpectralWorkflowPhase = None
-
     __phases: Dict[str, SpectralWorkflowPhase] = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.__phases={}
+        self.__phases = {}
 
     def getPhases(self):
         return self.__phases
@@ -23,11 +22,12 @@ class SpectralWorkflow:
 
     def addToPhases(self, phase: SpectralWorkflowPhase):
         self.__phases[phase.getType()] = phase
+        phase.setWorkflow(self)
 
-    def getPhase(self,spectralWorkflowPhaseType:str):
-        result=self.__phases.get(spectralWorkflowPhaseType)
+    def getPhase(self, spectralWorkflowPhaseType: str):
+        result = self.__phases.get(spectralWorkflowPhaseType)
         return result
 
-    def getAcquireViewPhase(self)->AcquireViewSpectralWorkflowPhase:
-        result=self.getPhase(SpectralWorkflowPhaseType.ACQUIRE_VIEW)
+    def getAcquireViewPhase(self) -> AcquireViewSpectralWorkflowPhase:
+        result = self.getPhase(SpectralWorkflowPhaseType.ACQUIREMENT_VIEW)
         return result
