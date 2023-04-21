@@ -3,6 +3,7 @@ from __future__ import annotations
 import uuid
 from typing import List, Dict
 
+
 from spectracs.model.spectral.SpectralWorkflowStep import SpectralWorkflowStep
 from spectracs.model.spectral.Spectrum import Spectrum
 
