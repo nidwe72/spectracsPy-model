@@ -1,5 +1,5 @@
-from spectracs.model.spectral.SpectralWorkflowPhase import SpectralWorkflowPhase
-from spectracs.model.spectral.SpectralWorkflowPhaseType import SpectralWorkflowPhaseType
+from sciens.spectracs.model.spectral.SpectralWorkflowPhase import SpectralWorkflowPhase
+from sciens.spectracs.model.spectral.SpectralWorkflowPhaseType import SpectralWorkflowPhaseType
 
 class AcquirementSpectralWorkflowPhase(SpectralWorkflowPhase):
 

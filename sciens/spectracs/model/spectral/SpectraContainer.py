@@ -4,8 +4,8 @@ import uuid
 from typing import List, Dict
 
 
-from spectracs.model.spectral.SpectralWorkflowStep import SpectralWorkflowStep
-from spectracs.model.spectral.Spectrum import Spectrum
+from sciens.spectracs.model.spectral.SpectralWorkflowStep import SpectralWorkflowStep
+from sciens.spectracs.model.spectral.Spectrum import Spectrum
 
 class SpectraContainer:
 

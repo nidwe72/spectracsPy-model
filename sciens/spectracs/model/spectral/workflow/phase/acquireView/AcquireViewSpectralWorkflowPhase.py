@@ -1,8 +1,8 @@
 from typing import List, Dict
 
-from spectracs.model.spectral.SpectralWorkflowPhase import SpectralWorkflowPhase
-from spectracs.model.spectral.SpectralWorkflowPhaseType import SpectralWorkflowPhaseType
-from spectracs.model.spectral.workflow.phase.setp.AcquireViewSpectralWorkflowStep import AcquireViewSpectralWorkflowStep
+from sciens.spectracs.model.spectral.SpectralWorkflowPhase import SpectralWorkflowPhase
+from sciens.spectracs.model.spectral.SpectralWorkflowPhaseType import SpectralWorkflowPhaseType
+from sciens.spectracs.model.spectral.workflow.phase.setp.AcquireViewSpectralWorkflowStep import AcquireViewSpectralWorkflowStep
 
 
 class AcquireViewSpectralWorkflowPhase(SpectralWorkflowPhase):

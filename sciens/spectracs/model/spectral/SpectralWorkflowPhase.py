@@ -2,10 +2,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 import uuid
 from typing import Dict
-from spectracs.model.spectral.SpectralWorkflowStep import SpectralWorkflowStep
+from sciens.spectracs.model.spectral.SpectralWorkflowStep import SpectralWorkflowStep
 
 try:
-    from spectracs.model.spectral.SpectralWorkflow import SpectralWorkflow
+    from sciens.spectracs.model.spectral.SpectralWorkflow import SpectralWorkflow
 except ImportError:
     import sys
     SpectralWorkflow = sys.modules[__package__ + '.SpectralWorkflow']

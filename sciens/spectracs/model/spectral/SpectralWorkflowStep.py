@@ -1,7 +1,7 @@
 import uuid
 
 try:
-    from spectracs.model.spectral.SpectralWorkflowPhase import SpectralWorkflowPhase
+    from sciens.spectracs.model.spectral.SpectralWorkflowPhase import SpectralWorkflowPhase
 except ImportError:
     import sys
     SpectralWorkflowPhase = sys.modules[__package__ + '.SpectralWorkflowPhase']

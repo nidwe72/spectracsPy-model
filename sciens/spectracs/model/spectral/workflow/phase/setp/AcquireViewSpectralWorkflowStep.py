@@ -1,7 +1,7 @@
 from typing import List
 
-from spectracs.model.spectral.SpectralWorkflowStep import SpectralWorkflowStep
-from spectracs.model.spectral.SpectrumSampleType import SpectrumSampleType
+from sciens.spectracs.model.spectral.SpectralWorkflowStep import SpectralWorkflowStep
+from sciens.spectracs.model.spectral.SpectrumSampleType import SpectrumSampleType
 
 
 class AcquireViewSpectralWorkflowStep(SpectralWorkflowStep):
