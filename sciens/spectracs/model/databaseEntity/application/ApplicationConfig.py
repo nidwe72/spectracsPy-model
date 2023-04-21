@@ -9,7 +9,7 @@ from sciens.spectracs.model.databaseEntity.application.ApplicationConfigToSpectr
 
 class ApplicationConfig(DbBaseEntity, DbBaseEntityMixin):
 
-    spectrometerProfilesMapping: Mapped[List[ApplicationConfigToSpectrometerProfile]] = relationship()
+    spectrometerProfilesMapping: Mapped[List[ApplicationConfigToSpectrometerProfile]] = relationship("ApplicationConfigToSpectrometerProfile")
 
     def getSpectrometerProfilesMapping(self)->Mapped[List[ApplicationConfigToSpectrometerProfile]]:
         return self.spectrometerProfilesMapping
