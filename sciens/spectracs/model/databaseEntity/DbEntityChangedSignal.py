@@ -11,7 +11,8 @@ class DbEntityChangedSignal(QObject,Generic[E]):
     operation:DbEntityCrudOperation=None
 
     def __init__(self,parent=None):
-        super().__init__(parent)
+        #super().__init__(parent)
+        super().__init__()
 
     def setEntity(self,entity:E):
         self.entity=entity
