@@ -7,7 +7,7 @@ from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEnt
 
 class Spectrometer(DbBaseEntity, DbBaseEntityMixin):
 
-    modelName=Column(String) #InVision
+    modelName=Column(String)
 
     spectrometerSensorId = Column(String, ForeignKey("spectrometer_sensor.id"))
     spectrometerSensor = relationship("SpectrometerSensor")
