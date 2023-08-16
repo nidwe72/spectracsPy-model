@@ -60,7 +60,7 @@
       <recent name="$PROJECT_DIR$/sciens/spectracs/logic/persistence/database" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.spectracsPyServer">
+  <component name="RunManager" selected="Python tests.pytest for TestSpectracsPyServer.TestSpectracsPyServer.test_test2">
     <configuration name="SpectracsPyServer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="spectracsPy-server" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -163,8 +163,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.spectracsPyServer" />
         <item itemvalue="Python tests.pytest for TestSpectracsPyServer.TestSpectracsPyServer.test_test2" />
+        <item itemvalue="Python.spectracsPyServer" />
         <item itemvalue="Python.SpectracsPyServer" />
         <item itemvalue="Python.spectracsMain" />
         <item itemvalue="Python tests.pytest for TestSpectracsPyServer.TestSpectracsPyServer" />
