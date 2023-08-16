@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="10f10d16-6673-4b4e-9d6f-f51dbfd19866" name="Changes" comment="* SpectracsPyServer: using a name server">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../spectracsPy-server/spectracsPyServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../spectracsPy-server/spectracsPyServer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer/TestSpectracsPyServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer/TestSpectracsPyServer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,7 +192,7 @@
       <workItem from="1692031175843" duration="1846000" />
       <workItem from="1692092856089" duration="8399000" />
       <workItem from="1692110362066" duration="9516000" />
-      <workItem from="1692178429381" duration="4371000" />
+      <workItem from="1692178429381" duration="4990000" />
     </task>
     <task id="LOCAL-00001" summary="* SpectracsPyServer: initial commit">
       <created>1692032940767</created>
@@ -231,7 +229,21 @@
       <option name="project" value="LOCAL" />
       <updated>1692180897301</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="* SpectracsPyServer: using a name server">
+      <created>1692182885748</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1692182885748</updated>
+    </task>
+    <task id="LOCAL-00007" summary="* SpectracsPyServer: using a name server">
+      <created>1692183420486</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1692183420486</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -371,6 +383,11 @@
           <line>18</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer/TestSpectracsPyServer.py</url>
+          <line>27</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -381,7 +398,7 @@
     <SUITE FILE_PATH="coverage/spectracsPy_model$pytest_for_TestSpectracsPyServer_TestSpectracsPyServer_test_test.coverage" NAME="pytest for TestSpectracsPyServer.TestSpectracsPyServer.test_test Coverage Results" MODIFIED="1692098043415" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer" />
     <SUITE FILE_PATH="coverage/spectracsPy_model$pytest_in_SpectracsPyServerTest_py.coverage" NAME="pytest in TestSpectracsPyServer.py Coverage Results" MODIFIED="1692097190965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer" />
     <SUITE FILE_PATH="coverage/spectracsPy_model$SpectracsPyServer.coverage" NAME="SpectracsPyServer Coverage Results" MODIFIED="1692116188438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs" />
-    <SUITE FILE_PATH="coverage/spectracsPy_model$spectracsPyServer.coverage" NAME="spectracsPyServer Coverage Results" MODIFIED="1692182672956" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy-server" />
-    <SUITE FILE_PATH="coverage/spectracsPy_model$pytest_for_TestSpectracsPyServer_TestSpectracsPyServer_test_test2.coverage" NAME="pytest for TestSpectracsPyServer.TestSpectracsPyServer.test_test2 Coverage Results" MODIFIED="1692182694702" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer" />
+    <SUITE FILE_PATH="coverage/spectracsPy_model$spectracsPyServer.coverage" NAME="spectracsPyServer Coverage Results" MODIFIED="1692182824498" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy-server" />
+    <SUITE FILE_PATH="coverage/spectracsPy_model$pytest_for_TestSpectracsPyServer_TestSpectracsPyServer_test_test2.coverage" NAME="pytest for TestSpectracsPyServer.TestSpectracsPyServer.test_test2 Coverage Results" MODIFIED="1692182836188" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer" />
   </component>
 </project>
