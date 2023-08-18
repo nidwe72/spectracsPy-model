@@ -9,7 +9,7 @@ from sqlalchemy.orm import declared_attr
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.schema import Column
 from sqlalchemy.sql.sqltypes import String
-
+from sqlalchemy_serializer import SerializerMixin
 
 from sciens.base.Singleton import Singleton
 
@@ -42,7 +42,7 @@ def get_guid():
     return result
 
 @declarative_mixin
-class DbBaseEntityMixin:
+class DbBaseEntityMixin(SerializerMixin):
     __table_args__ = {'extend_existing': True}
     @declared_attr
     def __tablename__(cls):
