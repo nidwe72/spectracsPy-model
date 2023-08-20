@@ -8,4 +8,5 @@ class SpectrometerVendorSchema(SQLAlchemyAutoSchema):
         model = SpectrometerVendor
         include_relationships = True
         load_instance = True
+        transient = True
 

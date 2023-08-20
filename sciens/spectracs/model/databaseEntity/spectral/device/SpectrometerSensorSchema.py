@@ -15,4 +15,4 @@ class SpectrometerSensorSchema(SQLAlchemyAutoSchema):
         model = SpectrometerSensor
         include_relationships = True
         load_instance = True
-
+        transient = True

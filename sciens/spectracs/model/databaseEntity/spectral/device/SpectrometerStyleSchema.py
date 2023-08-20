@@ -8,4 +8,6 @@ class SpectrometerStyleSchema(SQLAlchemyAutoSchema):
         model = SpectrometerStyle
         include_relationships = True
         load_instance = True
+        transient = True
+
 

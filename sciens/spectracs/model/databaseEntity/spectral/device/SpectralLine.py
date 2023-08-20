@@ -6,7 +6,13 @@ from sqlalchemy import Integer,String
 from sqlalchemy.orm import relationship
 
 from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
+from sciens.spectracs.model.databaseEntity.spectral.device.SpectralLineMasterData import SpectralLineMasterData
 
+try:
+    from sciens.spectracs.model.databaseEntity.spectral.device.calibration.SpectrometerCalibrationProfile import \
+        SpectrometerCalibrationProfile
+except ImportError:
+    pass
 
 class SpectralLine(DbBaseEntity, DbBaseEntityMixin):
 
@@ -16,6 +22,8 @@ class SpectralLine(DbBaseEntity, DbBaseEntityMixin):
     spectrometerCalibrationProfile = relationship("SpectrometerCalibrationProfile", back_populates="spectralLines")
 
     spectralLineMasterDataId = Column(String, ForeignKey("spectral_line_master_data.id"))
+
+    SpectralLineMasterData()
     spectralLineMasterData = relationship("SpectralLineMasterData")
 
     #transient stuff follows

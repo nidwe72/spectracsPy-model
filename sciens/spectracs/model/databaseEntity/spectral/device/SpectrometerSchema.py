@@ -13,6 +13,7 @@ class SpectrometerSchema(SQLAlchemyAutoSchema):
         model = Spectrometer
         include_relationships = True
         load_instance = True
+        transient = True
 
     spectrometerSensor = Nested(SpectrometerSensorSchema, many=False)
     spectrometerVendor = Nested(SpectrometerVendorSchema, many=False)

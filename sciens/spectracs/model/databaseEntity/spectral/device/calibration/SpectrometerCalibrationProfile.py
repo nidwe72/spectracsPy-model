@@ -6,6 +6,14 @@ from sqlalchemy.orm import relationship
 
 from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
 
+try:
+    from sciens.spectracs.model.databaseEntity.spectral.device.SpectralLine import SpectralLine
+except ImportError:
+    pass
+
+
+
+
 # import pdb; pdb.set_trace()
 
 class SpectrometerCalibrationProfile(DbBaseEntity, DbBaseEntityMixin):

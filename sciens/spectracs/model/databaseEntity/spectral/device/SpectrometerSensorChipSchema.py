@@ -8,4 +8,5 @@ class SpectrometerSensorChipSchema(SQLAlchemyAutoSchema):
         model = SpectrometerSensorChip
         include_relationships = True
         load_instance = True
+        transient = True
 
