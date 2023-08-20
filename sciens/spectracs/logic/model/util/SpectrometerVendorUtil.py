@@ -12,6 +12,14 @@ from sciens.spectracs.model.databaseEntity.spectral.device.SpectrometerVendorNam
 class SpectrometerVendorUtil(Singleton):
     persistedSpectrometerVendors:Dict[int,SpectrometerVendor]= {}
 
+    def getPersistentSpectrometerVendors(self):
+
+        persistenceParametersGetSpectrometerVendors = PersistenceParametersGetSpectrometerVendors()
+        result=PersistSpectrometerVendorLogicModule().getSpectrometerVendors(persistenceParametersGetSpectrometerVendors)
+        return result
+
+
+
     def getSpectrometerVendors(self) -> Dict[str, SpectrometerVendor]:
 
         transientSpectrometerVendors={}
