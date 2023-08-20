@@ -4,15 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10f10d16-6673-4b4e-9d6f-f51dbfd19866" name="Changes" comment="* SpectracsPyServer: shifted model-realted utility classes to model project">
-      <change afterPath="$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SqlAlchemySerializer.py" afterDir="false" />
+    <list default="true" id="10f10d16-6673-4b4e-9d6f-f51dbfd19866" name="Changes" comment="* [SpectracsPyServer]&#10;* now using Pyro5&#10;* serializing and persisting now seems to work">
+      <change afterPath="$PROJECT_DIR$/sciens/spectracs/model/databaseEntity/spectral/device/SpectrometerSchema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sciens/spectracs/model/databaseEntity/spectral/device/SpectrometerSensorChipSchema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sciens/spectracs/model/databaseEntity/spectral/device/SpectrometerSensorSchema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sciens/spectracs/model/databaseEntity/spectral/device/SpectrometerStyleSchema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sciens/spectracs/model/databaseEntity/spectral/device/SpectrometerVendorSchema.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/server/spectracs/SpectracsPyServerClient.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sciens/spectracs/logic/model/util/SpectrometerUtil.py" beforeDir="false" afterPath="$PROJECT_DIR$/sciens/spectracs/logic/model/util/SpectrometerUtil.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sciens/spectracs/model/databaseEntity/DbBase.py" beforeDir="false" afterPath="$PROJECT_DIR$/sciens/spectracs/model/databaseEntity/DbBase.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sciens/spectracs/model/databaseEntity/spectral/device/Spectrometer.py" beforeDir="false" afterPath="$PROJECT_DIR$/sciens/spectracs/model/databaseEntity/spectral/device/Spectrometer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SpectracsPyServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SpectracsPyServer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SqlAlchemySerializer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SqlAlchemySerializer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../spectracsPy-server/spectracsPyServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../spectracsPy-server/spectracsPyServer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer/TestSpectracsPyServer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer/TestSpectracsPyServer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/view/main/MainContainerViewModule.py" beforeDir="false" afterPath="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/view/main/MainContainerViewModule.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,21 +71,21 @@
       <recent name="$PROJECT_DIR$/sciens/spectracs/logic/persistence/database" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for TestSpectracsPyServer.TestSpectracsPyServer.test_test2">
-    <configuration name="SpectracsPyServer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="spectracsPy-server" />
+  <component name="RunManager" selected="Python.spectracsMain">
+    <configuration name="SpectracsPyServerClient" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="spectracsPy" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/server/spectracs" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SpectracsPyServer.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/server/spectracs/SpectracsPyServerClient.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -175,11 +179,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for TestSpectracsPyServer.TestSpectracsPyServer.test_test2" />
-        <item itemvalue="Python.spectracsPyServer" />
-        <item itemvalue="Python.serializers" />
         <item itemvalue="Python.spectracsMain" />
-        <item itemvalue="Python.SpectracsPyServer" />
+        <item itemvalue="Python.spectracsPyServer" />
+        <item itemvalue="Python.SpectracsPyServerClient" />
+        <item itemvalue="Python tests.pytest for TestSpectracsPyServer.TestSpectracsPyServer.test_test2" />
+        <item itemvalue="Python.serializers" />
       </list>
     </recent_temporary>
   </component>
@@ -211,7 +215,8 @@
       <workItem from="1692194782110" duration="3524000" />
       <workItem from="1692198509134" duration="1587000" />
       <workItem from="1692269985286" duration="4417000" />
-      <workItem from="1692353023044" duration="2982000" />
+      <workItem from="1692353023044" duration="9997000" />
+      <workItem from="1692522552963" duration="218000" />
     </task>
     <task id="LOCAL-00001" summary="* SpectracsPyServer: initial commit">
       <created>1692032940767</created>
@@ -276,7 +281,14 @@
       <option name="project" value="LOCAL" />
       <updated>1692191932838</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="* [SpectracsPyServer]&#10;* now using Pyro5&#10;* serializing and persisting now seems to work">
+      <created>1692356182873</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1692356182873</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -312,7 +324,8 @@
     <MESSAGE value="* SpectracsPyServer: SQL tables are now created and server starts up" />
     <MESSAGE value="* SpectracsPyServer: using a name server" />
     <MESSAGE value="* SpectracsPyServer: shifted model-realted utility classes to model project" />
-    <option name="LAST_COMMIT_MESSAGE" value="* SpectracsPyServer: shifted model-realted utility classes to model project" />
+    <MESSAGE value="* [SpectracsPyServer]&#10;* now using Pyro5&#10;* serializing and persisting now seems to work" />
+    <option name="LAST_COMMIT_MESSAGE" value="* [SpectracsPyServer]&#10;* now using Pyro5&#10;* serializing and persisting now seems to work" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -322,47 +335,47 @@
           <line>100</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/appliction/video/VideoThread.py</url>
           <line>110</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/appliction/video/VideoThread.py</url>
           <line>144</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/spectral/acquisition/ImageSpectrumAcquisitionLogicModule.py</url>
           <line>22</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/spectral/video/SpectrometerCalibrationProfileWavelengthCalibrationVideoThread.py</url>
           <line>21</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/appliction/video/VideoThread.py</url>
           <line>137</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/spectral/video/SpectrometerCalibrationProfileWavelengthCalibrationVideoThread.py</url>
           <line>30</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/spectral/video/SpectrometerCalibrationProfileWavelengthCalibrationVideoThread.py</url>
           <line>26</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/controller/application/setting/ApplicationSettings.py</url>
           <line>13</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/persistence/database/spectrometerProfile/PersistSpectrometerProfileLogicModule.py</url>
           <line>11</line>
           <option name="timeStamp" value="11" />
@@ -372,110 +385,105 @@
           <line>20</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SpectracsPyServer.py</url>
-          <line>37</line>
+          <line>38</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/spectracsPyServer.py</url>
           <line>17</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/spectracsPyServer.py</url>
-          <line>45</line>
+          <line>46</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/spectracsPyServer.py</url>
-          <line>47</line>
+          <line>48</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/spectracsPyServer.py</url>
-          <line>26</line>
+          <line>27</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$USER_HOME$/.local/lib/python3.10/site-packages/Pyro4/naming.py</url>
           <line>512</line>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer/TestSpectracsPyServer.py</url>
           <line>24</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer/TestSpectracsPyServer.py</url>
           <line>50</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SpectracsPyServer.py</url>
-          <line>44</line>
+          <line>49</line>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SpectracsPyServer.py</url>
-          <line>45</line>
+          <line>50</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer/TestSpectracsPyServer.py</url>
           <line>42</line>
           <option name="timeStamp" value="33" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SpectracsPyServer.py</url>
-          <line>40</line>
+          <line>45</line>
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/spectracsPyServer.py</url>
-          <line>55</line>
+          <line>56</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SpectracsPyServer.py</url>
-          <line>34</line>
+          <line>35</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer/TestSpectracsPyServer.py</url>
           <line>38</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer/TestSpectracsPyServer.py</url>
           <line>37</line>
           <option name="timeStamp" value="39" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer/TestSpectracsPyServer.py</url>
           <line>34</line>
           <option name="timeStamp" value="40" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SqlAlchemySerializer.py</url>
-          <line>11</line>
+          <line>16</line>
           <option name="timeStamp" value="41" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SqlAlchemySerializer.py</url>
-          <line>14</line>
+          <line>25</line>
           <option name="timeStamp" value="42" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SqlAlchemySerializer.py</url>
-          <line>8</line>
+          <line>10</line>
           <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/../spectracsPy-server/spectracsPyServer.py</url>
-          <line>23</line>
-          <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$USER_HOME$/.local/lib/python3.10/site-packages/serpent.py</url>
@@ -497,33 +505,84 @@
           <line>257</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$USER_HOME$/.local/lib/python3.10/site-packages/serpent.py</url>
           <line>490</line>
           <option name="timeStamp" value="49" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer/TestSpectracsPyServer.py</url>
           <line>44</line>
           <option name="timeStamp" value="50" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../spectracsPy-server/spectracsPyServer.py</url>
-          <line>36</line>
+          <line>37</line>
           <option name="timeStamp" value="51" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/server/spectracs/SpectracsPyServerClient.py</url>
+          <line>32</line>
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/server/spectracs/SpectracsPyServerClient.py</url>
+          <line>20</line>
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/server/spectracs/SpectracsPyServerClient.py</url>
+          <line>28</line>
+          <option name="timeStamp" value="54" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SpectracsPyServer.py</url>
+          <line>41</line>
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SpectracsPyServer.py</url>
+          <line>42</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/server/spectracs/SpectracsPyServerClient.py</url>
+          <line>21</line>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/sciens/spectracs/logic/model/util/SpectrometerUtil.py</url>
+          <line>131</line>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/sciens/spectracs/logic/model/util/SpectrometerUtil.py</url>
+          <line>127</line>
+          <option name="timeStamp" value="59" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs/SqlAlchemySerializer.py</url>
+          <line>13</line>
+          <option name="timeStamp" value="60" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../spectracsPy-server/spectracsPyServer.py</url>
+          <line>23</line>
+          <option name="timeStamp" value="61" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/spectracsPy_model$spectracsMain.coverage" NAME="spectracsMain Coverage Results" MODIFIED="1692191807885" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy" />
+    <SUITE FILE_PATH="coverage/spectracsPy_model$spectracsMain.coverage" NAME="spectracsMain Coverage Results" MODIFIED="1692361729737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy" />
     <SUITE FILE_PATH="coverage/spectracsPy_model$pytest_for_TestSpectracsPyServer_TestSpectracsPyServer.coverage" NAME="pytest for TestSpectracsPyServer.TestSpectracsPyServer Coverage Results" MODIFIED="1692100043287" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer" />
     <SUITE FILE_PATH="coverage/spectracsPy_model$pytest_for_TestSpectracsPyServer_SpectracsPyServerTest.coverage" NAME="pytest for TestSpectracsPyServer.SpectracsPyServerTest Coverage Results" MODIFIED="1692097070787" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer" />
     <SUITE FILE_PATH="coverage/spectracsPy_model$serializers.coverage" NAME="serializers Coverage Results" MODIFIED="1692353246652" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/.local/lib/python3.10/site-packages/Pyro5" />
     <SUITE FILE_PATH="coverage/spectracsPy_model$pytest_for_TestSpectracsPyServer_TestSpectracsPyServer_test_test.coverage" NAME="pytest for TestSpectracsPyServer.TestSpectracsPyServer.test_test Coverage Results" MODIFIED="1692098043415" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer" />
     <SUITE FILE_PATH="coverage/spectracsPy_model$pytest_in_SpectracsPyServerTest_py.coverage" NAME="pytest in TestSpectracsPyServer.py Coverage Results" MODIFIED="1692097190965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer" />
     <SUITE FILE_PATH="coverage/spectracsPy_model$SpectracsPyServer.coverage" NAME="SpectracsPyServer Coverage Results" MODIFIED="1692116188438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy-server/sciens/spectracs" />
-    <SUITE FILE_PATH="coverage/spectracsPy_model$spectracsPyServer.coverage" NAME="spectracsPyServer Coverage Results" MODIFIED="1692355203189" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy-server" />
+    <SUITE FILE_PATH="coverage/spectracsPy_model$spectracsPyServer.coverage" NAME="spectracsPyServer Coverage Results" MODIFIED="1692363921600" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy-server" />
     <SUITE FILE_PATH="coverage/spectracsPy_model$pytest_for_TestSpectracsPyServer_TestSpectracsPyServer_test_test2.coverage" NAME="pytest for TestSpectracsPyServer.TestSpectracsPyServer.test_test2 Coverage Results" MODIFIED="1692355560121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/test/logic/server/spectracsPyServer" />
+    <SUITE FILE_PATH="coverage/spectracsPy_model$SpectracsPyServerClient.coverage" NAME="SpectracsPyServerClient Coverage Results" MODIFIED="1692360905586" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../spectracsPy/sciens/spectracs/logic/server/spectracs" />
   </component>
 </project>

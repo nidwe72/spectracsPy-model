@@ -124,6 +124,14 @@ class SpectrometerUtil(Singleton):
             result[self.getName(entity)]=entity
         return result
 
+    def getEntitiesByIds(self, entitiesByIds:Dict[str, Spectrometer])->Dict[id, Spectrometer]:
+        result={}
+        for entity in entitiesByIds.values():
+            entityId = entity.id
+            result[entityId]=entity
+        return result
+
+
     def getSpectrometersHavingSensorConnected(self)->List[Spectrometer]:
         result:List[Spectrometer]=[]
 
