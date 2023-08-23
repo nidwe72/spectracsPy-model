@@ -1,7 +1,5 @@
 from typing import Dict
 
-import usb
-
 from sciens.base.Singleton import Singleton
 from sciens.spectracs.logic.model.util.SpectrometerSensorChipUtil import SpectrometerSensorChipUtil
 from sciens.spectracs.logic.persistence.database.spectrometerSensor.PersistSpectrometerSensorLogicModule import \
@@ -96,17 +94,6 @@ class SpectrometerSensorUtil(Singleton):
     def getHardwareId(self, spectrometerSensor: SpectrometerSensor):
         result = spectrometerSensor.vendorId + '_' + spectrometerSensor.modelId
         return result
-
-    def isSensorConnected(self, spectrometerSensor: SpectrometerSensor):
-        result = True
-        dev = usb.core.find(idVendor=int('0x' + spectrometerSensor.vendorId, base=16),
-                            idProduct=int('0x' + spectrometerSensor.modelId, base=16))
-
-        if dev is None:
-            result = False
-
-        return result
-
 
     def getSensorByCodeName(self, spectrometerSensorCodenName) -> SpectrometerSensor:
         spectrometerSensors = self.getSpectrometerSensors()

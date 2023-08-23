@@ -132,18 +132,6 @@ class SpectrometerUtil(Singleton):
         return result
 
 
-    def getSpectrometersHavingSensorConnected(self)->List[Spectrometer]:
-        result:List[Spectrometer]=[]
-
-        spectrometers = SpectrometerUtil().getSpectrometers()
-
-        for spectrometerId, spectrometer in spectrometers.items():
-            spectrometerSensor = SpectrometerSensorUtil().getSensorByCodeName(spectrometer.spectrometerSensor.codeName)
-            if spectrometerSensor is not None:
-                isSensorConnected = SpectrometerSensorUtil().isSensorConnected(spectrometerSensor)
-                if isSensorConnected:
-                    result.append(spectrometer)
-        return result
 
 
 
