@@ -12,6 +12,12 @@ from sciens.spectracs.model.databaseEntity.spectral.device.SpectrometerStyleName
 
 class SpectrometerStyleUtil(Singleton):
 
+    def getPersistentSpectrometerStyles(self) -> Dict[str, SpectrometerStyle]:
+        persistSpectrometerStyleLogicModule = PersistSpectrometerStyleLogicModule()
+        parameters = PersistenceParametersGetSpectrometerStyles()
+        result=persistSpectrometerStyleLogicModule.getSpectrometerStyles(parameters)
+        return result
+
     def getSpectrometerStyles(self) -> Dict[str, SpectrometerStyle]:
         transientSpectrometerStyles = {}
 

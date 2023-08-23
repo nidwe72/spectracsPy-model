@@ -14,6 +14,12 @@ from sciens.spectracs.model.databaseEntity.spectral.device.SpectrometerSensorCod
 
 class SpectrometerSensorUtil(Singleton):
 
+    def getPersistedSpectrometerSensors(self) -> Dict[int, SpectrometerSensor]:
+        module = PersistSpectrometerSensorLogicModule()
+        parameters = PersistenceParametersGetSpectrometerSensors()
+        result=module.getSpectrometerSensors(parameters)
+        return result
+
     def getSpectrometerSensors(self) -> Dict[str, SpectrometerSensor]:
         transientEntities = {}
 

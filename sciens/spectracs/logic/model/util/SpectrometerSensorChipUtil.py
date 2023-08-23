@@ -9,6 +9,11 @@ from sciens.spectracs.model.databaseEntity.spectral.device.SpectrometerSensorChi
 
 class SpectrometerSensorChipUtil(Singleton):
 
+    def getPersistentSpectrometerSensorChips(self) -> Dict[str, SpectrometerSensorChip]:
+        module = PersistSpectrometerSensorChipLogicModule()
+        parameters=PersistenceParametersGetSpectrometerSensorChips()
+        result=module.getSpectrometerSensorChips(parameters)
+        return result
 
     def getSpectrometerSensorChips(self) -> Dict[str, SpectrometerSensorChip]:
         transientEntities = {}
