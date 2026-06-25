@@ -15,6 +15,10 @@ class Spectrum:
     def __init__(self):
         self.sampleType = SpectrumSampleType.SAMPLE
         self.valuesByNanometers=[]
+        # Per-instance captured frames. Without this reset the class-level default list above is shared
+        # across every Spectrum, so frames from earlier runs (and different image widths) accumulate and
+        # SpectrumUtil.mean() crashes on the ragged rows.
+        self.__capturedValuesByNanometers=[]
 
     def setValuesByNanometers(self, valuesByNanometers):
         self.valuesByNanometers = valuesByNanometers
