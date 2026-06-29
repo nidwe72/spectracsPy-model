@@ -1,1 +1,5 @@
 /dist/spectracsPy-model-1.0.0.tar.gz
+
+# Python bytecode caches (regenerable)
+__pycache__/
+*.py[cod]
