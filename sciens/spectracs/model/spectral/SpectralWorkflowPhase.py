@@ -1,54 +1,37 @@
-from __future__ import annotations
-from typing import TYPE_CHECKING
 import uuid
-from typing import Dict
-from sciens.spectracs.model.spectral.SpectralWorkflowStep import SpectralWorkflowStep
 
-try:
-    from sciens.spectracs.model.spectral.SpectralWorkflow import SpectralWorkflow
-except ImportError:
-    import sys
-    SpectralWorkflow = sys.modules[__package__ + '.SpectralWorkflow']
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm.collections import attribute_keyed_dict
+
+from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
 
 
-class SpectralWorkflowPhase:
-    __type: str = None
-    __workflow: SpectralWorkflow = None
-    __steps:Dict[str,SpectralWorkflowStep]=None
-    __id: str = None
+class SpectralWorkflowPhase(DbBaseEntity, DbBaseEntityMixin):
+    # Runtime object AND DB row (Option A). A phase of the run; its steps are plugin-created (keyed by id).
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.__id = uuid.uuid4()
-        self.__type = None
-        self.__workflow = None
-        self.__steps = {}
+    workflowId = Column(String, ForeignKey('spectral_workflow.id'))
+    type = Column(String)
 
-    def getType(self):
-        return self.__type
+    steps = relationship("SpectralWorkflowStep", collection_class=attribute_keyed_dict('id'),
+                         cascade="all, delete-orphan", back_populates="phase")
+    workflow = relationship("SpectralWorkflow", back_populates="phases")
 
-    def setType(self, phaseType):
-        self.__type = phaseType
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if self.id is None:
+            self.id = str(uuid.uuid4())
 
-    def getWorkflow(self):
-        return self.__workflow
-
-    def setWorkflow(self, workflow):
-        self.__workflow = workflow
-
-    def getSteps(self):
-        return self.__steps
-
-    def setSteps(self, steps:Dict[str,SpectralWorkflowStep]):
-        self.__steps = steps
-
-    def addToSteps(self, step:SpectralWorkflowStep):
-        self.__steps[step.getId()] = step
-
-    def getId(self) -> str:
-        result = self.__id
-        return result
-
-    def setId(self, id: str):
-        self.__id
-
+    def getType(self): return self.type
+    def setType(self, phaseType): self.type = phaseType
+    def getWorkflow(self): return self.workflow
+    def setWorkflow(self, workflow): self.workflow = workflow
+    def getSteps(self): return self.steps
+    def setSteps(self, steps):
+        self.steps.clear()
+        for step in steps.values():
+            self.addToSteps(step)
+    def addToSteps(self, step):
+        self.steps[step.getId()] = step
+    def getId(self): return self.id
+    def setId(self, id): self.id = id

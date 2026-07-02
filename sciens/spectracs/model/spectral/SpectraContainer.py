@@ -1,56 +1,58 @@
-from __future__ import annotations
-
 import uuid
-from typing import Dict, List
 
-from sciens.spectracs.model.spectral.SpectralWorkflowStep import SpectralWorkflowStep
-from sciens.spectracs.model.spectral.Spectrum import Spectrum
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.orm import relationship, reconstructor
+from sqlalchemy.orm.collections import attribute_keyed_dict
+
+from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
 
 
-class SpectraContainer:
-    # One stage of a run: named bags of spectra that remember their lineage
-    # (SPECTRAL_WORKFLOW_CONCEPT.md 9.2 / SPEC_pumpkin_integration.md A.0).
-    #   spectra    : { role -> Spectrum }        the data
-    #   inputs     : [ SpectraContainer ]        SOURCE / provenance (a LIST — absorption needs two)
-    #   producedBy : SpectralWorkflowStep        OWNER (the step that produced this container)
+class SpectraContainer(DbBaseEntity, DbBaseEntityMixin):
+    # Runtime object AND DB row (Option A). One stage of a run: named bags of spectra keyed by role
+    # (attribute_keyed_dict). `producedBy` = the step that owns it. `inputs` (provenance) stays TRANSIENT
+    # for now (SPEC_workflow_persistence.md §9 out-of-scope).
 
-    __spectra: Dict[str, Spectrum] = None
-    __inputs: List[SpectraContainer] = None
-    __producedBy: SpectralWorkflowStep = None
+    stepId = Column(String, ForeignKey('spectral_workflow_step.id'))
 
-    def __getSpectra(self) -> Dict[str, Spectrum]:
-        # Lazy init (no __init__: this is used by Singleton-flavoured callers where __init__ re-runs).
-        if self.__spectra is None:
-            self.__spectra = {}
-        return self.__spectra
+    _spectra = relationship("Spectrum", collection_class=attribute_keyed_dict('role'),
+                            cascade="all, delete-orphan")
+    producedBy = relationship("SpectralWorkflowStep", back_populates="container")
 
-    def __getInputs(self) -> List[SpectraContainer]:
-        if self.__inputs is None:
-            self.__inputs = []
-        return self.__inputs
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if self.id is None:
+            self.id = str(uuid.uuid4())
+        self.__initTransient()
 
-    def getSpectra(self) -> Dict[str, Spectrum]:
-        return self.__getSpectra()
+    @reconstructor
+    def __initTransient(self):
+        self._inputs = []
 
-    def setSpectra(self, spectra: Dict[str, Spectrum]):
-        self.__spectra = spectra
+    def getSpectra(self):
+        return self._spectra
 
-    def addToSpectra(self, spectrum: Spectrum, key: str = None):
+    def setSpectra(self, spectra):
+        self._spectra.clear()
+        for key, spectrum in spectra.items():
+            self.addToSpectra(spectrum, key)
+
+    def addToSpectra(self, spectrum, key=None):
         if key is None:
             key = str(uuid.uuid4())
-        self.__getSpectra()[key] = spectrum
+        spectrum.role = key           # the keyed-dict key IS spectrum.role
+        self._spectra[key] = spectrum
 
-    def getInputs(self) -> List[SpectraContainer]:
-        return self.__getInputs()
+    def getInputs(self):
+        return self._inputs
 
-    def setInputs(self, inputs: List[SpectraContainer]):
-        self.__inputs = inputs
+    def setInputs(self, inputs):
+        self._inputs = inputs
 
-    def addToInputs(self, sourceSpectraContainer: SpectraContainer):
-        self.__getInputs().append(sourceSpectraContainer)
+    def addToInputs(self, sourceSpectraContainer):
+        self._inputs.append(sourceSpectraContainer)
 
-    def getProducedBy(self) -> SpectralWorkflowStep:
-        return self.__producedBy
+    def getProducedBy(self):
+        return self.producedBy
 
-    def setProducedBy(self, producedBy: SpectralWorkflowStep):
-        self.__producedBy = producedBy
+    def setProducedBy(self, producedBy):
+        self.producedBy = producedBy

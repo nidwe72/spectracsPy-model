@@ -1,98 +1,61 @@
 import uuid
 
-try:
-    from sciens.spectracs.model.spectral.SpectralWorkflowPhase import SpectralWorkflowPhase
-except ImportError:
-    # Circular import at load time — SpectralWorkflowPhase is only used as a type hint here, so fall back
-    # to the partially-loaded module if present, else None (avoids a KeyError when Step is imported first).
-    import sys
-    __phaseModule = sys.modules.get(__package__ + '.SpectralWorkflowPhase')
-    SpectralWorkflowPhase = getattr(__phaseModule, 'SpectralWorkflowPhase', None)
+from sqlalchemy import Column, String, Integer, Boolean, ForeignKey
+from sqlalchemy.orm import relationship, reconstructor
+
+from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
 
 
-class SpectralWorkflowStep:
-    __phase: SpectralWorkflowPhase = None
-    __id: str = None
+class SpectralWorkflowStep(DbBaseEntity, DbBaseEntityMixin):
+    # Runtime object AND DB row (Option A). Carries one unit of work: a spectra container and/or an
+    # evaluation result (both cascade children). `view`/`widget` are host-built TRANSIENT (never mapped).
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.__id = uuid.uuid4()
-        # §9.3 carrier fields (SPEC_pumpkin_integration.md B.4). Durable ones stay data-only; view/widget
-        # are transient/host-built (kept untyped so the model repo pulls in no Qt).
-        self.__container = None
-        self.__evaluationResult = None
-        self.__view = None
-        self.__widget = None
-        self.__persist = False
-        self.__role = None
-        self.__label = None
-        self.__frames = None
-        self.__mandatory = False
+    phaseId = Column(String, ForeignKey('spectral_workflow_phase.id'))
+    role = Column(String)
+    label = Column(String)
+    frames = Column(Integer)
+    mandatory = Column(Boolean, default=False)
+    persist = Column(Boolean, default=False)
 
-    def getPhase(self) -> SpectralWorkflowPhase:
-        result = self.__phase
-        return result
+    container = relationship("SpectraContainer", uselist=False, back_populates="producedBy",
+                             cascade="all, delete-orphan")
+    evaluationResult = relationship("EvaluationResult", uselist=False, cascade="all, delete-orphan")
+    phase = relationship("SpectralWorkflowPhase", back_populates="steps")
 
-    def setPhase(self, phase: SpectralWorkflowPhase):
-        self.__phase = phase
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if self.id is None:
+            self.id = str(uuid.uuid4())
+        if self.mandatory is None:
+            self.mandatory = False
+        if self.persist is None:
+            self.persist = False
+        self.__initTransient()
 
-    def getId(self) -> str:
-        result = self.__id
-        return result
+    @reconstructor
+    def __initTransient(self):
+        self._view = None
+        self._widget = None
 
-    def setId(self, id: str):
-        self.__id=id
-
-    def getContainer(self):
-        return self.__container
-
-    def setContainer(self, container):
-        self.__container = container
-
-    def getEvaluationResult(self):
-        return self.__evaluationResult
-
-    def setEvaluationResult(self, evaluationResult):
-        self.__evaluationResult = evaluationResult
-
-    def getView(self):
-        return self.__view
-
-    def setView(self, view):
-        self.__view = view
-
-    def getWidget(self):
-        return self.__widget
-
-    def setWidget(self, widget):
-        self.__widget = widget
-
-    def getPersist(self) -> bool:
-        return self.__persist
-
-    def setPersist(self, persist: bool):
-        self.__persist = persist
-
-    def getRole(self):
-        return self.__role
-
-    def setRole(self, role):
-        self.__role = role
-
-    def getLabel(self):
-        return self.__label
-
-    def setLabel(self, label):
-        self.__label = label
-
-    def getFrames(self):
-        return self.__frames
-
-    def setFrames(self, frames):
-        self.__frames = frames
-
-    def getMandatory(self) -> bool:
-        return self.__mandatory
-
-    def setMandatory(self, mandatory: bool):
-        self.__mandatory = mandatory
+    def getPhase(self): return self.phase
+    def setPhase(self, phase): self.phase = phase
+    def getId(self): return self.id
+    def setId(self, id): self.id = id
+    def getContainer(self): return self.container
+    def setContainer(self, container): self.container = container
+    def getEvaluationResult(self): return self.evaluationResult
+    def setEvaluationResult(self, evaluationResult): self.evaluationResult = evaluationResult
+    def getView(self): return self._view
+    def setView(self, view): self._view = view
+    def getWidget(self): return self._widget
+    def setWidget(self, widget): self._widget = widget
+    def getPersist(self): return self.persist
+    def setPersist(self, persist): self.persist = persist
+    def getRole(self): return self.role
+    def setRole(self, role): self.role = role
+    def getLabel(self): return self.label
+    def setLabel(self, label): self.label = label
+    def getFrames(self): return self.frames
+    def setFrames(self, frames): self.frames = frames
+    def getMandatory(self): return self.mandatory
+    def setMandatory(self, mandatory): self.mandatory = mandatory

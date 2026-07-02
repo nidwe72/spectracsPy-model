@@ -23,11 +23,22 @@ engine = create_engine(dbFilepath)
 
 _SessionFactory = sessionmaker(bind=engine,expire_on_commit=False)
 
+# A separate factory for SHORT-LIVED sessions used to persist an object graph (workflow save/update/delete).
+# autoflush=False so ONLY an explicit add()+commit() writes — a transient/half-built graph held elsewhere in
+# the app can never be dragged in by an unrelated query, the way the shared singleton session would
+# (SPEC_workflow_persistence.md §2.2). The caller owns the lifecycle: get it, use it, close() it.
+_SaveSessionFactory = sessionmaker(bind=engine, expire_on_commit=False, autoflush=False)
+
 DbBaseEntity = declarative_base()
 
 def session_factory()->Session:
     DbBaseEntity.metadata.create_all(engine)
     return SessionProvider().getSession()
+
+def save_session()->Session:
+    # A fresh, short-lived, autoflush-OFF session for persisting/updating/deleting a workflow graph.
+    DbBaseEntity.metadata.create_all(engine)
+    return _SaveSessionFactory()
 
 
 def to_underscore(name):
