@@ -1,6 +1,5 @@
 
 
-from appdata import AppDataPaths
 from sqlalchemy import \
     create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -12,13 +11,13 @@ from sqlalchemy.sql.sqltypes import String
 from sqlalchemy_serializer import SerializerMixin
 
 from sciens.base.Singleton import Singleton
+from sciens.spectracs.model.databaseEntity.AppDataPathUtil import get_app_data_dir
 
 import uuid
 
-app_paths = AppDataPaths()
-app_paths.setup()
+appDataDir = get_app_data_dir()
 
-dbFilepath='sqlite:///'+app_paths.app_data_path+'/spectracsPy.db'
+dbFilepath='sqlite:///'+appDataDir+'/spectracsPy.db'
 engine = create_engine(dbFilepath)
 
 _SessionFactory = sessionmaker(bind=engine,expire_on_commit=False)

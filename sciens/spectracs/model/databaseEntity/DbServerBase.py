@@ -4,11 +4,11 @@ from sqlalchemy.orm import sessionmaker, Session
 
 from sciens.base.Singleton import Singleton
 
-# Reuse the same appdata location resolver as the app DB, but a SEPARATE database file.
+# Reuse the same app-data location resolver as the app DB, but a SEPARATE database file.
 # The user store is server-owned and must live apart from the app's spectracsPy.db.
-from sciens.spectracs.model.databaseEntity.DbBase import app_paths
+from sciens.spectracs.model.databaseEntity.AppDataPathUtil import get_app_data_dir
 
-serverDbFilepath = 'sqlite:///' + app_paths.app_data_path + '/spectracsPyServer.db'
+serverDbFilepath = 'sqlite:///' + get_app_data_dir() + '/spectracsPyServer.db'
 serverEngine = create_engine(serverDbFilepath)
 
 _ServerSessionFactory = sessionmaker(bind=serverEngine, expire_on_commit=False)
