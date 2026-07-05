@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from sciens.spectracs.model.databaseEntity.DbServerBase import server_session_factory
 from sciens.spectracs.model.databaseEntity.application.plugin.DbPlugin import DbPlugin
@@ -10,6 +10,23 @@ class PersistPluginLogicModule:
     def findPluginByCodeRef(self, codeRef: str) -> Optional[DbPlugin]:
         session = server_session_factory()
         return session.query(DbPlugin).filter(DbPlugin.codeRef == codeRef).first()
+
+    def listPlugins(self) -> List[DbPlugin]:
+        session = server_session_factory()
+        return session.query(DbPlugin).all()
+
+    def upsert(self, title: str, codeRef: str, version: str, pdfRef: str = None) -> DbPlugin:
+        # Master Plugin-management GUI (SPEC_connection_and_calibration_ux.md §4.1.a): keyed on codeRef.
+        existing = self.findPluginByCodeRef(codeRef)
+        if existing is not None:
+            existing.title = title
+            existing.version = version
+            existing.pdfRef = pdfRef
+            session = server_session_factory()
+            session.merge(existing)
+            session.commit()
+            return existing
+        return self.getOrCreate(title, codeRef, version, pdfRef)
 
     def savePlugin(self, dbPlugin: DbPlugin):
         session = server_session_factory()

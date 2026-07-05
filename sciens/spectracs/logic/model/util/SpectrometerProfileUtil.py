@@ -27,9 +27,14 @@ class SpectrometerProfileUtil(Singleton):
         applicationConfig = ApplicationContextLogicModule().getApplicationConfig()
         spectrometerProfilesMapping=applicationConfig.getSpectrometerProfilesMapping()
 
+        profilesById = None
         for spectrometerProfilesMappingEntry in spectrometerProfilesMapping:
             if spectrometerProfilesMappingEntry.isDefault:
-                spectrometerProfile = spectrometerProfilesMappingEntry.spectrometerProfile
+                # SpectrometerProfile moved to the server DB — resolve the soft id reference by lookup
+                # (the relationship no longer exists). See ApplicationConfigToSpectrometerProfile.
+                if profilesById is None:
+                    profilesById = self.getSpectrometerProfiles()
+                spectrometerProfile = profilesById.get(spectrometerProfilesMappingEntry.spectrometer_profile_id)
                 applicationSettings = ApplicationContextLogicModule().getApplicationSettings()
                 applicationSettings.setSpectrometerProfile(spectrometerProfile)
                 break

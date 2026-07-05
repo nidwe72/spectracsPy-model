@@ -1,10 +1,11 @@
 from sqlalchemy import Column, Float
 from sqlalchemy import String
 
-from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
+from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntityMixin
+from sciens.spectracs.model.databaseEntity.DbServerBase import ServerDbBaseEntity
 
 
-class SpectralLineMasterData(DbBaseEntity, DbBaseEntityMixin):
+class SpectralLineMasterData(ServerDbBaseEntity, DbBaseEntityMixin):
     name = Column(String)
     colorName = Column(String)
     mainColorName = Column(String)

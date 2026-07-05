@@ -29,10 +29,21 @@ class UserSeedLogicModule:
     PUMPKIN_TEST_USER = ("pumpkinTestUser", "pumpkinTestUser", UserRoleType.END_USER)
     VIRTUAL_DEVICE_CODE_NAME = SpectrometerSensorCodeName.VIRTUAX.value  # "Virtuax"
 
+    # Demo serial-keyed instrument (SPEC_connection_and_calibration_ux.md §9): binds the virtual device +
+    # pumpkin plugin under one serial, and the pumpkin demo user registers it. XXXX-XXXX format.
+    DEMO_SERIAL = "TEST-0001"
+
     def seed(self):
         self.__seedRoles()
         self.__seedUsers()
         self.__seedPumpkinBinding()  # plugin + bound demo user (after roles/users exist)
+        self.__seedInstrument()      # serial -> SpectrometerSetup{virtual device, calibration, pumpkin plugin}
+
+    def __applyIdentity(self, appUser, username):
+        # New identity fields (SPEC_connection_and_calibration_ux.md §3.1-5). Dev placeholders.
+        appUser.email = username + "@example.com"
+        appUser.firstName = username
+        appUser.lastName = "User"
 
     def __seedRoles(self):
         persist = PersistUserLogicModule()
@@ -54,6 +65,7 @@ class UserSeedLogicModule:
             appUser.passwordHash = passwordUtil.hash(password)
             appUser.displayName = username
             appUser.enabled = True
+            self.__applyIdentity(appUser, username)
             persist.saveUser(appUser)
 
             role = persist.findRoleByName(roleType.value)
@@ -63,19 +75,12 @@ class UserSeedLogicModule:
             persist.saveUserToRole(link)
 
     def __seedPumpkinBinding(self):
+        # Create the pumpkin demo user (identity + END_USER role). Its instrument binding (plugin + device)
+        # is NOT on the user any more — it flows from registeredSerial, set in __seedInstrument.
         persist = PersistUserLogicModule()
-        # 1) the plugin row (get-or-create, idempotent on codeRef) — before the bound user needs its id.
-        dbPlugin = PersistPluginLogicModule().getOrCreate(
-            self.PUMPKIN_PLUGIN["title"], self.PUMPKIN_PLUGIN["codeRef"], self.PUMPKIN_PLUGIN["version"])
 
         username, password, roleType = self.PUMPKIN_TEST_USER
-        existing = persist.findUserByUsername(username)
-        if existing is not None:
-            # Upgrade an already-seeded user whose binding is missing (robust across partial prior runs).
-            if existing.pluginId is None or existing.spectrometerDevice is None:
-                existing.pluginId = dbPlugin.id
-                existing.spectrometerDevice = self.VIRTUAL_DEVICE_CODE_NAME
-                persist.updateUser(existing)
+        if persist.findUserByUsername(username) is not None:
             return
 
         appUser = AppUser()
@@ -83,8 +88,7 @@ class UserSeedLogicModule:
         appUser.passwordHash = PasswordUtil().hash(password)
         appUser.displayName = username
         appUser.enabled = True
-        appUser.pluginId = dbPlugin.id
-        appUser.spectrometerDevice = self.VIRTUAL_DEVICE_CODE_NAME
+        self.__applyIdentity(appUser, username)
         persist.saveUser(appUser)
 
         role = persist.findRoleByName(roleType.value)
@@ -92,3 +96,30 @@ class UserSeedLogicModule:
         link.app_user_id = appUser.id
         link.app_user_role_id = role.id
         persist.saveUserToRole(link)
+
+    def __seedInstrument(self):
+        # Establish ONE serial-keyed instrument (SPEC_connection_and_calibration_ux.md §9): the virtual
+        # device + an (empty) calibration + the pumpkin plugin, bound under DEMO_SERIAL, and register the
+        # pumpkin demo user against it. Idempotent on the serial. This gives resolveInstrumentBySerial (A3)
+        # real data and exercises the new SpectrometerSetup FKs at boot.
+        from sciens.spectracs.logic.model.util.SpectrometerUtil import SpectrometerUtil
+        from sciens.spectracs.logic.persistence.database.spectrometerSetup.PersistSpectrometerSetupLogicModule import \
+            PersistSpectrometerSetupLogicModule
+
+        dbPlugin = PersistPluginLogicModule().getOrCreate(
+            self.PUMPKIN_PLUGIN["title"], self.PUMPKIN_PLUGIN["codeRef"], self.PUMPKIN_PLUGIN["version"])
+
+        spectrometers = SpectrometerUtil().getSpectrometers()  # get-or-creates the catalog server-side
+        virtual = next((s for s in spectrometers.values()
+                        if s.spectrometerSensor.codeName == self.VIRTUAL_DEVICE_CODE_NAME), None)
+        if virtual is None:
+            return
+
+        PersistSpectrometerSetupLogicModule().getOrCreateInstrument(self.DEMO_SERIAL, virtual.id, dbPlugin.id)
+
+        # Register the pumpkin demo user against the serial (additive to the legacy pluginId binding).
+        persist = PersistUserLogicModule()
+        user = persist.findUserByUsername(self.PUMPKIN_TEST_USER[0])
+        if user is not None and user.registeredSerial is None:
+            user.registeredSerial = self.DEMO_SERIAL
+            persist.updateUser(user)

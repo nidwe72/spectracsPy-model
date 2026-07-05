@@ -2,13 +2,14 @@ from sqlalchemy import Column, ForeignKey
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
 
-from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
+from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntityMixin
+from sciens.spectracs.model.databaseEntity.DbServerBase import ServerDbBaseEntity
 from sciens.spectracs.model.databaseEntity.spectral.device.SpectrometerSensor import SpectrometerSensor
 from sciens.spectracs.model.databaseEntity.spectral.device.SpectrometerStyle import SpectrometerStyle
 from sciens.spectracs.model.databaseEntity.spectral.device.SpectrometerVendor import SpectrometerVendor
 
 
-class Spectrometer(DbBaseEntity, DbBaseEntityMixin):
+class Spectrometer(ServerDbBaseEntity, DbBaseEntityMixin):
 
     modelName=Column(String)
 

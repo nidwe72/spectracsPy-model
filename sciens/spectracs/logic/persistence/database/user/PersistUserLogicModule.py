@@ -12,6 +12,11 @@ class PersistUserLogicModule:
         session = server_session_factory()
         return session.query(AppUser).filter(AppUser.username == username).first()
 
+    def findUserByRegisteredSerial(self, serial: str) -> Optional[AppUser]:
+        # One user <-> one serial (SPEC_connection_and_calibration_ux.md §3.1-4).
+        session = server_session_factory()
+        return session.query(AppUser).filter(AppUser.registeredSerial == serial).first()
+
     def findRoleByName(self, name: str) -> Optional[AppUserRole]:
         session = server_session_factory()
         return session.query(AppUserRole).filter(AppUserRole.name == name).first()

@@ -1,4 +1,4 @@
-from sciens.spectracs.model.databaseEntity.DbBase import session_factory
+from sciens.spectracs.model.databaseEntity.DbServerBase import server_session_factory
 from sciens.spectracs.model.databaseEntity.spectral.device.calibration.SpectrometerCalibrationProfile import \
     SpectrometerCalibrationProfile
 
@@ -6,7 +6,7 @@ from sciens.spectracs.model.databaseEntity.spectral.device.calibration.Spectrome
 class PersistSpectrometerCalibrationProfileLogicModule:
 
     def saveSpectrometerCalibrationProfile(self, spectrometerCalibrationProfile: SpectrometerCalibrationProfile):
-        session = session_factory()
+        session = server_session_factory()
 
         # Track the profile and make sure it has an id before linking children.
         session.add(spectrometerCalibrationProfile)

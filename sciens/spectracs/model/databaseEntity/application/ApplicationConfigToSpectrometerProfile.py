@@ -1,33 +1,18 @@
-from sqlalchemy import ForeignKey, Column, Boolean
+from sqlalchemy import ForeignKey, Column, Boolean, String
 from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import relationship
-# from sqlalchemy.orm import MappedColumn
 
-import sqlalchemy.orm
-
-
-
-# from sqlalchemy.orm._orm_constructors import mapped_column
 from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
 
 class ApplicationConfigToSpectrometerProfile(DbBaseEntity,DbBaseEntityMixin):
 
     isDefault = Column('isDefault', Boolean, default=False)
 
-    # application_config_id: Mapped[str] = mapped_column(ForeignKey("application_config.id"), primary_key=True)
-
-    # spectrometer_profile_id: Mapped[str] = mapped_column(
-    #     ForeignKey("spectrometer_profile.id"), primary_key=True
-    # )
-
-
     application_config_id: Mapped[str] = Column(ForeignKey("application_config.id"), primary_key=True)
 
-    spectrometer_profile_id: Mapped[str] = Column(
-        ForeignKey("spectrometer_profile.id"), primary_key=True
-    )
-
-
-    spectrometerProfile: Mapped["SpectrometerProfile"] = relationship("SpectrometerProfile")
+    # SpectrometerProfile now lives on the SERVER DB (SPEC_connection_and_calibration_ux.md §3 / A2), so
+    # a cross-database ForeignKey/relationship is impossible. This is a SOFT id reference; the profile is
+    # looked up over the server DB by id. The whole ApplicationConfig active-profile mechanism is retired
+    # in A4 (active instrument = the logged-in user's registeredSerial) — this decouple is that first step.
+    spectrometer_profile_id: Mapped[str] = Column(String, primary_key=True)
 
 

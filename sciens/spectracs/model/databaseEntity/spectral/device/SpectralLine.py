@@ -5,7 +5,8 @@ from sqlalchemy import Column, ForeignKey
 from sqlalchemy import Integer,String
 from sqlalchemy.orm import relationship
 
-from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
+from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntityMixin
+from sciens.spectracs.model.databaseEntity.DbServerBase import ServerDbBaseEntity
 from sciens.spectracs.model.databaseEntity.spectral.device.SpectralLineMasterData import SpectralLineMasterData
 
 try:
@@ -14,7 +15,7 @@ try:
 except ImportError:
     pass
 
-class SpectralLine(DbBaseEntity, DbBaseEntityMixin):
+class SpectralLine(ServerDbBaseEntity, DbBaseEntityMixin):
 
     pixelIndex=Column(Integer)
 

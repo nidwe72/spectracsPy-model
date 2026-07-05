@@ -2,11 +2,12 @@ from sqlalchemy import Column, ForeignKey, Boolean
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
 
-from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
+from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntityMixin
+from sciens.spectracs.model.databaseEntity.DbServerBase import ServerDbBaseEntity
 from sciens.spectracs.model.databaseEntity.spectral.device.SpectrometerSensorChip import SpectrometerSensorChip
 
 
-class SpectrometerSensor(DbBaseEntity, DbBaseEntityMixin):
+class SpectrometerSensor(ServerDbBaseEntity, DbBaseEntityMixin):
 
     vendorId = Column(String)
     vendorName = Column(String)

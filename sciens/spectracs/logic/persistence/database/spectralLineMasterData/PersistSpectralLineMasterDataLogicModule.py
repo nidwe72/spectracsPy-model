@@ -6,14 +6,17 @@ from sqlalchemy import inspect
 from sciens.spectracs.logic.model.util.databaseEntity.SqlUtil import SqlUtil
 from sciens.spectracs.logic.persistence.database.spectralLineMasterData.PersistenceParametersGetSpectralLineMasterDatas import \
     PersistenceParametersGetSpectralLineMasterDatas
-from sciens.spectracs.model.databaseEntity.DbBase import session_factory
+# SpectralLineMasterData now lives on the SERVER DB (moved with SpectralLine so the ORM relationship
+# resolves in one registry — SPEC_connection_and_calibration_ux.md §9). SqlUtil.executeSelect is hardwired
+# to the APP session, so the read below runs SqlUtil's (session-agnostic) select on the SERVER session.
+from sciens.spectracs.model.databaseEntity.DbServerBase import server_session_factory
 from sciens.spectracs.model.databaseEntity.spectral.device.SpectralLineMasterData import SpectralLineMasterData
 
 
 class PersistSpectralLineMasterDataLogicModule:
 
     def saveSpectralLineMasterData(self, spectralLineMasterData: SpectralLineMasterData):
-        session = session_factory()
+        session = server_session_factory()
         session.add(spectralLineMasterData)
         session.commit()
 
@@ -27,7 +30,14 @@ class PersistSpectralLineMasterDataLogicModule:
 
         baseEntity = moduleParameters.getBaseEntity()
         selectStatement = SqlUtil.createSelect(baseEntity)
-        result = SqlUtil.executeSelect(baseEntity, selectStatement)
+
+        # Execute on the SERVER session (mirror of SqlUtil.executeSelect, which uses the app session).
+        session = server_session_factory()
+        primaryKeys = [key.name for key in inspect(baseEntity.__class__).primary_key]
+        primaryKey = next(iter(primaryKeys), None)
+        resultList = session.execute(selectStatement).all()
+        resultList = [next(iter(entry._asdict().values()), None) for entry in resultList]
+        result = {getattr(entry, primaryKey): entry for entry in resultList}
 
         return result
 

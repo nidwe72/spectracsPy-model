@@ -1,10 +1,7 @@
-from sqlalchemy import Column, String, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String, Boolean
 
 from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntityMixin
 from sciens.spectracs.model.databaseEntity.DbServerBase import ServerDbBaseEntity
-# Import registers DbPlugin BEFORE the AppUser mapper configures, so relationship("DbPlugin") resolves.
-from sciens.spectracs.model.databaseEntity.application.plugin.DbPlugin import DbPlugin
 
 
 class AppUser(ServerDbBaseEntity, DbBaseEntityMixin):
@@ -14,7 +11,11 @@ class AppUser(ServerDbBaseEntity, DbBaseEntityMixin):
     displayName = Column(String)
     enabled = Column(Boolean, default=True)
 
-    # --- config binding (SPEC_pumpkin_integration.md B.1a / D3 / D15) ---
-    pluginId = Column(String, ForeignKey("db_plugin.id"))  # REAL FK — same server DB
-    plugin = relationship("DbPlugin")
-    spectrometerDevice = Column(String)  # stable device code-name (e.g. "Virtuax") — NOT a random profile id
+    # --- identity (SPEC_connection_and_calibration_ux.md §3.1-5) ---
+    email = Column(String)       # mandatory at self-registration (support/feedback mailing)
+    firstName = Column(String)
+    lastName = Column(String)
+    # serial (XXXX-XXXX) of the SpectrometerSetup this end-user registered — the binding key. The instrument
+    # bundle (device + calibration + plugin) resolves through this serial via SpectrometerSetup, NOT through
+    # a per-user plugin binding. One user <-> one serial for now. (SPEC_connection_and_calibration_ux.md §3.)
+    registeredSerial = Column(String)

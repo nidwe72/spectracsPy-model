@@ -4,7 +4,8 @@ from sqlalchemy import Float
 from sqlalchemy import Integer
 from sqlalchemy.orm import relationship
 
-from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
+from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntityMixin
+from sciens.spectracs.model.databaseEntity.DbServerBase import ServerDbBaseEntity
 
 try:
     from sciens.spectracs.model.databaseEntity.spectral.device.SpectralLine import SpectralLine
@@ -16,7 +17,7 @@ except ImportError:
 
 # import pdb; pdb.set_trace()
 
-class SpectrometerCalibrationProfile(DbBaseEntity, DbBaseEntityMixin):
+class SpectrometerCalibrationProfile(ServerDbBaseEntity, DbBaseEntityMixin):
 
     regionOfInterestX1 = Column(Integer)
     regionOfInterestY1 = Column(Integer)
