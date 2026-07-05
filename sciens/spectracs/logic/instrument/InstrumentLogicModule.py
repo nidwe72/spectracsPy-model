@@ -1,3 +1,5 @@
+import json
+
 from sciens.spectracs.logic.persistence.database.spectrometerSetup.PersistSpectrometerSetupLogicModule import \
     PersistSpectrometerSetupLogicModule
 
@@ -38,7 +40,20 @@ class InstrumentLogicModule:
                 "interpolationCoefficientB": cal.interpolationCoefficientB,
                 "interpolationCoefficientC": cal.interpolationCoefficientC,
                 "interpolationCoefficientD": cal.interpolationCoefficientD,
+                "spectralLines": self.__spectralLinesDto(cal),
+                "spectrum": json.loads(cal.calibrationSpectrumJson) if cal.calibrationSpectrumJson else None,
             }
 
         return {"ok": True, "serial": serial, "deviceCodeName": deviceCodeName,
                 "pluginCodeRef": pluginCodeRef, "calibration": calibration, "message": None}
+
+    def __spectralLinesDto(self, cal):
+        result = []
+        for line in (cal.getSpectralLines() or []):
+            masterData = line.spectralLineMasterData
+            result.append({
+                "name": masterData.name if masterData is not None else None,
+                "nanometer": masterData.nanometer if masterData is not None else None,
+                "pixelIndex": line.pixelIndex,
+            })
+        return result

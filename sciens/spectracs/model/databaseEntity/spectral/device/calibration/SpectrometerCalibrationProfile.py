@@ -1,7 +1,9 @@
+from typing import ClassVar
 
 from sqlalchemy import Column
 from sqlalchemy import Float
 from sqlalchemy import Integer
+from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 
 from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntityMixin
@@ -30,8 +32,16 @@ class SpectrometerCalibrationProfile(ServerDbBaseEntity, DbBaseEntityMixin):
     interpolationCoefficientC = Column(Float)
     interpolationCoefficientD = Column(Float)
 
+    # The raw CFL capture used to calibrate, stored via the common Spectrum serialization
+    # (Spectrum.toJson() = {str(pixelIndex): intensity}); provenance that a sane CFL spectrum was used.
+    calibrationSpectrumJson = Column(Text)
+
     spectralLines = relationship("SpectralLine", back_populates="spectrometerCalibrationProfile",
                                  cascade="all, delete-orphan")
+
+    # Transient (NOT mapped): the in-memory Spectrum object, attached during detection and rebuilt from
+    # calibrationSpectrumJson on load. Harvested by the setup editor's Save into calibrationSpectrumJson.
+    calibrationSpectrum: ClassVar[object] = None
 
     def getSpectralLines(self):
         return self.spectralLines

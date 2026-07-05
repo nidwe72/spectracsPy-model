@@ -82,6 +82,30 @@ class UserAdminLogicModule:
         persist.deleteUser(userId)
         return {"ok": True, "userId": userId, "message": None}
 
+    def setRegisteredSerial(self, userId, serial) -> Dict:
+        """MASTER manual override of the user<->serial link (SPEC_connection_and_calibration_ux.md §11).
+        The normal path is end-user self-registration; this lets a master reassign a serial to a user.
+        Enforces 1:1 by clearing the serial off any prior holder first.
+        """
+        persist = PersistUserLogicModule()
+
+        appUser = persist.findUserById(userId)
+        if appUser is None:
+            return self.__error("user not found")
+
+        serial = (serial or "").strip()
+        if serial == "":
+            return self.__error("serial must not be empty")
+
+        prior = persist.findUserByRegisteredSerial(serial)
+        if prior is not None and prior.id != appUser.id:
+            prior.registeredSerial = None
+            persist.updateUser(prior)
+
+        appUser.registeredSerial = serial
+        persist.updateUser(appUser)
+        return {"ok": True, "userId": appUser.id, "message": None}
+
     def __isLastEnabledMaster(self, appUser: AppUser, persist: PersistUserLogicModule) -> bool:
         roles = persist.getRoleNamesForUser(appUser)
         if (not appUser.enabled) or UserRoleType.MASTER_USER.value not in roles:
@@ -91,7 +115,8 @@ class UserAdminLogicModule:
     def __toDto(self, appUser: AppUser, persist: PersistUserLogicModule) -> Dict:
         roles = persist.getRoleNamesForUser(appUser)
         return {"userId": appUser.id, "username": appUser.username,
-                "displayName": appUser.displayName, "enabled": appUser.enabled, "roles": roles}
+                "displayName": appUser.displayName, "enabled": appUser.enabled, "roles": roles,
+                "registeredSerial": appUser.registeredSerial}
 
     def __error(self, message: str) -> Dict:
         return {"ok": False, "userId": None, "message": message}
