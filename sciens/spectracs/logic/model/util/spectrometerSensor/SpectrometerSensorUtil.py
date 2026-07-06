@@ -8,9 +8,27 @@ from sciens.spectracs.logic.persistence.database.spectrometerSensor.PersistenceP
     PersistenceParametersGetSpectrometerSensors
 from sciens.spectracs.model.databaseEntity.spectral.device.SpectrometerSensor import SpectrometerSensor
 from sciens.spectracs.model.databaseEntity.spectral.device.SpectrometerSensorCodeName import SpectrometerSensorCodeName
+from sciens.spectracs.model.databaseEntity.spectral.device.SpectrometerSensorSettings import SpectrometerSensorSettings
 
 
 class SpectrometerSensorUtil(Singleton):
+
+    # Good per-camera capture exposures, judged empirically against the light source and hard-coded HERE
+    # (where the cameras are seeded), keyed by hardwareId = vendorId_modelId (SPEC_real_camera_capture.md
+    # §4/§9.3, KB_spectroscopy_physics.md §7). calibrationExposure verified on the CFL line source:
+    # 78 is the highest value that keeps the ELP's green ~546 nm line unclipped (150 clipped blue+green
+    # and merged the whole red cluster). measurementExposure (LED array, ref+sample) is a separate regime,
+    # still TBD. None => backend legacy default (150 Linux).
+    __CAPTURE_SETTINGS_BY_HARDWARE_ID = {
+        '32e4_8830': SpectrometerSensorSettings(calibrationExposure=78, measurementExposure=None),   # ELP
+        '0c45_6366': SpectrometerSensorSettings(calibrationExposure=None, measurementExposure=None),  # Microdia TBD
+    }
+
+    def getSensorSettings(self, spectrometerSensor: SpectrometerSensor) -> SpectrometerSensorSettings:
+        if spectrometerSensor is None:
+            return SpectrometerSensorSettings()
+        return self.__CAPTURE_SETTINGS_BY_HARDWARE_ID.get(
+            self.getHardwareId(spectrometerSensor), SpectrometerSensorSettings())
 
     def getPersistedSpectrometerSensors(self) -> Dict[int, SpectrometerSensor]:
         module = PersistSpectrometerSensorLogicModule()
