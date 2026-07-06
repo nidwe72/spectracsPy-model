@@ -33,11 +33,18 @@ class UserSeedLogicModule:
     # pumpkin plugin under one serial, and the pumpkin demo user registers it. XXXX-XXXX format.
     DEMO_SERIAL = "TEST-0001"
 
+    # 5b-connect (§12): a REAL-device demo instrument on the ELP camera + a user bound to it, so the
+    # automatic-connection indicator can be exercised against a real USB spectrometer.
+    ELP_SERIAL = "ELP-0001"
+    ELP_DEVICE_CODE_NAME = SpectrometerSensorCodeName.EXAKTA.value  # ELP 32e4:8830
+    ELP_USER = ("elpUser", "elpUser", UserRoleType.END_USER)
+
     def seed(self):
         self.__seedRoles()
         self.__seedUsers()
         self.__seedPumpkinBinding()  # plugin + bound demo user (after roles/users exist)
         self.__seedInstrument()      # serial -> SpectrometerSetup{virtual device, calibration, pumpkin plugin}
+        self.__seedElpInstrument()   # §12: real ELP instrument + elpUser registered to it
 
     def __applyIdentity(self, appUser, username):
         # New identity fields (SPEC_connection_and_calibration_ux.md §3.1-5). Dev placeholders.
@@ -122,4 +129,46 @@ class UserSeedLogicModule:
         user = persist.findUserByUsername(self.PUMPKIN_TEST_USER[0])
         if user is not None and user.registeredSerial is None:
             user.registeredSerial = self.DEMO_SERIAL
+            persist.updateUser(user)
+
+    def __seedElpInstrument(self):
+        # §12 (5b-connect): a REAL ELP instrument (serial ELP-0001 -> EXAKTA device + empty calibration +
+        # pumpkin plugin) and elpUser registered to it, so the auto-connection indicator can be tested
+        # against a real USB spectrometer. Idempotent on the username + serial (mirrors __seedInstrument).
+        from sciens.spectracs.logic.model.util.SpectrometerUtil import SpectrometerUtil
+        from sciens.spectracs.logic.persistence.database.spectrometerSetup.PersistSpectrometerSetupLogicModule import \
+            PersistSpectrometerSetupLogicModule
+
+        persist = PersistUserLogicModule()
+
+        username, password, roleType = self.ELP_USER
+        if persist.findUserByUsername(username) is None:
+            appUser = AppUser()
+            appUser.username = username
+            appUser.passwordHash = PasswordUtil().hash(password)
+            appUser.displayName = username
+            appUser.enabled = True
+            self.__applyIdentity(appUser, username)
+            persist.saveUser(appUser)
+
+            role = persist.findRoleByName(roleType.value)
+            link = AppUserToAppUserRole()
+            link.app_user_id = appUser.id
+            link.app_user_role_id = role.id
+            persist.saveUserToRole(link)
+
+        dbPlugin = PersistPluginLogicModule().getOrCreate(
+            self.PUMPKIN_PLUGIN["title"], self.PUMPKIN_PLUGIN["codeRef"], self.PUMPKIN_PLUGIN["version"])
+
+        spectrometers = SpectrometerUtil().getSpectrometers()
+        elp = next((s for s in spectrometers.values()
+                    if s.spectrometerSensor.codeName == self.ELP_DEVICE_CODE_NAME), None)
+        if elp is None:
+            return
+
+        PersistSpectrometerSetupLogicModule().getOrCreateInstrument(self.ELP_SERIAL, elp.id, dbPlugin.id)
+
+        user = persist.findUserByUsername(username)
+        if user is not None and user.registeredSerial is None:
+            user.registeredSerial = self.ELP_SERIAL
             persist.updateUser(user)
