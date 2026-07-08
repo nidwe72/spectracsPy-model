@@ -39,12 +39,17 @@ class UserSeedLogicModule:
     ELP_DEVICE_CODE_NAME = SpectrometerSensorCodeName.EXAKTA.value  # ELP 32e4:8830
     ELP_USER = ("elpUser", "elpUser", UserRoleType.END_USER)
 
+    # SPEC_dev_measure_bench §11: a MASTER user bound to the real ELP instrument, so the dev measurement
+    # bench opens against a real calibrated ELP setup (calibration authored once — D6). Shares ELP_SERIAL.
+    EXAKTA_MASTER_USER = ("masterUserExakta", "masterUserExakta", UserRoleType.MASTER_USER)
+
     def seed(self):
         self.__seedRoles()
         self.__seedUsers()
         self.__seedPumpkinBinding()  # plugin + bound demo user (after roles/users exist)
         self.__seedInstrument()      # serial -> SpectrometerSetup{virtual device, calibration, pumpkin plugin}
         self.__seedElpInstrument()   # §12: real ELP instrument + elpUser registered to it
+        self.__seedExaktaMasterUser()  # SPEC_dev_measure_bench: master bound to the ELP serial
 
     def __applyIdentity(self, appUser, username):
         # New identity fields (SPEC_connection_and_calibration_ux.md §3.1-5). Dev placeholders.
@@ -167,6 +172,34 @@ class UserSeedLogicModule:
             return
 
         PersistSpectrometerSetupLogicModule().getOrCreateInstrument(self.ELP_SERIAL, elp.id, dbPlugin.id)
+
+        user = persist.findUserByUsername(username)
+        if user is not None and user.registeredSerial is None:
+            user.registeredSerial = self.ELP_SERIAL
+            persist.updateUser(user)
+
+    def __seedExaktaMasterUser(self):
+        # SPEC_dev_measure_bench §11: seed the masterUserExakta MASTER user and bind it to the ELP serial
+        # (created by __seedElpInstrument). The bench consumes this setup's calibration; the calibration
+        # itself is authored once by the master via the instrument-authoring flow (D6 — not seeded).
+        # Idempotent on the username + serial.
+        persist = PersistUserLogicModule()
+
+        username, password, roleType = self.EXAKTA_MASTER_USER
+        if persist.findUserByUsername(username) is None:
+            appUser = AppUser()
+            appUser.username = username
+            appUser.passwordHash = PasswordUtil().hash(password)
+            appUser.displayName = username
+            appUser.enabled = True
+            self.__applyIdentity(appUser, username)
+            persist.saveUser(appUser)
+
+            role = persist.findRoleByName(roleType.value)
+            link = AppUserToAppUserRole()
+            link.app_user_id = appUser.id
+            link.app_user_role_id = role.id
+            persist.saveUserToRole(link)
 
         user = persist.findUserByUsername(username)
         if user is not None and user.registeredSerial is None:
