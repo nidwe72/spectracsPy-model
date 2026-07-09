@@ -7,6 +7,7 @@ from sqlalchemy.orm import reconstructor
 from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
 from sciens.spectracs.model.spectral.evaluation.ColorSwatchView import ColorSwatchView
 from sciens.spectracs.model.spectral.evaluation.LabelView import LabelView
+from sciens.spectracs.model.spectral.evaluation.MetricFieldView import MetricFieldView
 from sciens.spectracs.model.spectral.evaluation.SpectrumPlotView import SpectrumPlotView
 from sciens.spectracs.model.spectral.evaluation.VerdictView import VerdictView
 
@@ -46,6 +47,9 @@ class EvaluationResult(DbBaseEntity, DbBaseEntityMixin):
             elif isinstance(item, VerdictView):
                 result.append({"type": "verdict", "roastState": item.roastState,
                                "hueDegrees": item.hueDegrees})
+            elif isinstance(item, MetricFieldView):
+                result.append({"type": "metric", "label": item.label, "value": item.value,
+                               "tooltip": item.tooltip})
             elif isinstance(item, LabelView):
                 result.append({"type": "label", "text": item.text})
             elif isinstance(item, SpectrumPlotView):
@@ -69,6 +73,8 @@ class EvaluationResult(DbBaseEntity, DbBaseEntityMixin):
                 items.append(ColorSwatchView(tuple(entry["rgb"]), entry.get("label")))
             elif kind == "verdict":
                 items.append(VerdictView(entry["roastState"], entry.get("hueDegrees")))
+            elif kind == "metric":
+                items.append(MetricFieldView(entry["label"], entry["value"], entry.get("tooltip")))
             elif kind == "label":
                 items.append(LabelView(entry["text"]))
             elif kind == "plot":
