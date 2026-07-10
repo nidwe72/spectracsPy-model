@@ -5,11 +5,11 @@ from sqlalchemy import Column, String, Text, ForeignKey
 from sqlalchemy.orm import reconstructor
 
 from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
-from sciens.spectracs.model.spectral.evaluation.ColorSwatchView import ColorSwatchView
-from sciens.spectracs.model.spectral.evaluation.LabelView import LabelView
-from sciens.spectracs.model.spectral.evaluation.MetricFieldView import MetricFieldView
-from sciens.spectracs.model.spectral.evaluation.SpectrumPlotView import SpectrumPlotView
-from sciens.spectracs.model.spectral.evaluation.VerdictView import VerdictView
+from sciens.spectracs.model.spectral.plugin.view.ColorSwatchView import ColorSwatchView
+from sciens.spectracs.model.spectral.plugin.view.LabelView import LabelView
+from sciens.spectracs.model.spectral.plugin.view.MetricFieldView import MetricFieldView
+from sciens.spectracs.model.spectral.plugin.view.SpectrumPlotView import SpectrumPlotView
+from sciens.spectracs.model.spectral.plugin.view.VerdictView import VerdictView
 
 
 class EvaluationResult(DbBaseEntity, DbBaseEntityMixin):

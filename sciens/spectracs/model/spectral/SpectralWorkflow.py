@@ -62,4 +62,4 @@ from sciens.spectracs.model.spectral.SpectralWorkflowStep import SpectralWorkflo
 from sciens.spectracs.model.spectral.SpectraContainer import SpectraContainer  # noqa: E402,F401
 from sciens.spectracs.model.spectral.Spectrum import Spectrum  # noqa: E402,F401
 from sciens.spectracs.model.spectral.SpectralWorkflowMetadata import SpectralWorkflowMetadata  # noqa: E402,F401
-from sciens.spectracs.model.spectral.evaluation.EvaluationResult import EvaluationResult  # noqa: E402,F401
+from sciens.spectracs.model.spectral.plugin.view.EvaluationResult import EvaluationResult  # noqa: E402,F401
