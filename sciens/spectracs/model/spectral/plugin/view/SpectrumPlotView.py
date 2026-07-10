@@ -1,4 +1,7 @@
-class SpectrumPlotView:
+from sciens.spectracs.model.spectral.plugin.view.ReportableView import ReportableView
+
+
+class SpectrumPlotView(ReportableView):
     # A spectrum plot the host draws (PROCESSING absorption, EVALUATION spectrum, reference+sample overlay).
     # SPEC_pumpkin_integration.md B.3 + SPEC_plugin_driven_convergence.md §3 (P2, additive):
     #   - single curve (back-compatible): SpectrumPlotView(spectrum, title)
@@ -31,3 +34,26 @@ class SpectrumPlotView:
             result.append((self.spectrum, None, None))
         result.extend(self.traces)
         return result
+
+    # --- serialization (SPEC_bench_pdf_export.md §5, D2): round-trips EVERY curve (primary + traces) plus the
+    # band/marker annotations — the old central ladder kept only the primary spectrum + title. ---
+    def toJson(self):
+        return {"type": "plot", "title": self.title,
+                "spectrum": self.spectrum.toJson() if self.spectrum is not None else None,
+                "traces": [{"values": trace[0].toJson() if trace[0] is not None else {},
+                            "label": trace[1], "color": trace[2]} for trace in self.traces],
+                "bands": [list(band) for band in self.bands],
+                "markers": [list(marker) for marker in self.markers],
+                "isShownInReport": self.isShownInReport}
+
+    @classmethod
+    def fromJson(cls, entry):
+        from sciens.spectracs.model.spectral.Spectrum import Spectrum
+        primary = Spectrum().fromJson(entry["spectrum"]) if entry.get("spectrum") is not None else None
+        view = cls(primary, entry.get("title"),
+                   bands=[tuple(band) for band in entry.get("bands", [])],
+                   markers=[tuple(marker) for marker in entry.get("markers", [])])
+        for trace in entry.get("traces", []):
+            view.addTrace(Spectrum().fromJson(trace.get("values", {})), trace.get("label"), trace.get("color"))
+        view.isShownInReport = entry.get("isShownInReport", False)
+        return view

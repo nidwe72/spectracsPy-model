@@ -44,6 +44,44 @@ class SpectralWorkflow(DbBaseEntity, DbBaseEntityMixin):
     def getAcquireViewPhase(self):
         return self.getPhase(SpectralWorkflowPhaseType.ACQUIREMENT_VIEW)
 
+    # --- report serialization (SPEC_bench_pdf_export.md §5, D3) — the WHOLE workflow as the machine-readable
+    # LIS payload embedded in the PDF: run header + every phase -> step -> (its SpectraContainer spectra
+    # {nm:value} + its EvaluationResult view-models + any serializable passive view). Complete provenance, raw
+    # acquisition through verdict. Distinct from the *visible* report (the isShownInReport subset). Captured
+    # image PIXELS are NOT here (§5b) — the SpectrumCaptureView descriptor carries only its attachmentName; the
+    # image travels as a named PDF attachment. ---
+    def toReportJson(self):
+        phases = []
+        for phaseType in SpectralWorkflowPhaseType:
+            phase = self.getPhase(phaseType)
+            if phase is None:
+                continue
+            steps = []
+            for step in phase.getSteps().values():
+                steps.append(self.__stepReportJson(step))
+            phases.append({"type": getattr(phaseType, "value", str(phaseType)), "steps": steps})
+        return {
+            "header": {"username": self.username, "userId": self.userId,
+                       "pluginCodeRef": self.pluginCodeRef, "timestampIso": self.timestampIso},
+            "phases": phases,
+        }
+
+    @staticmethod
+    def __stepReportJson(step):
+        entry = {"id": step.getId(), "role": step.getRole(), "label": step.getLabel(),
+                 "spectra": {}, "items": []}
+        container = step.getContainer()
+        if container is not None:
+            entry["spectra"] = {role: spectrum.toJson()
+                                for role, spectrum in container.getSpectra().items()}
+        result = step.getEvaluationResult()
+        if result is not None:
+            entry["items"].extend(item.toJson() for item in result.getItems() if hasattr(item, "toJson"))
+        view = step.getView() if hasattr(step, "getView") else None
+        if view is not None and hasattr(view, "toJson"):  # passive SpectrumPlotView/SpectrumCaptureView; skips
+            entry["items"].append(view.toJson())          # the interactive CaptureView / the ReportView (no toJson)
+        return entry
+
     def getMetadataFields(self):
         return self.metadataFields
     def setMetadataFields(self, fields):

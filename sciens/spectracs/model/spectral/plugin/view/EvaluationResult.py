@@ -5,11 +5,7 @@ from sqlalchemy import Column, String, Text, ForeignKey
 from sqlalchemy.orm import reconstructor
 
 from sciens.spectracs.model.databaseEntity.DbBase import DbBaseEntity, DbBaseEntityMixin
-from sciens.spectracs.model.spectral.plugin.view.ColorSwatchView import ColorSwatchView
-from sciens.spectracs.model.spectral.plugin.view.LabelView import LabelView
-from sciens.spectracs.model.spectral.plugin.view.MetricFieldView import MetricFieldView
-from sciens.spectracs.model.spectral.plugin.view.SpectrumPlotView import SpectrumPlotView
-from sciens.spectracs.model.spectral.plugin.view.VerdictView import VerdictView
+from sciens.spectracs.model.spectral.plugin.view.ViewModelFactory import ViewModelFactory
 
 
 class EvaluationResult(DbBaseEntity, DbBaseEntityMixin):
@@ -38,25 +34,13 @@ class EvaluationResult(DbBaseEntity, DbBaseEntityMixin):
             self._items = self.__fromJson(self.resultJson)
         return self._items
 
-    # --- serialization (P2) ---
+    # --- serialization (SPEC_bench_pdf_export.md §5, D2) — delegates to the generic per-view-model protocol.
+    # EvaluationResult no longer knows the view-model types: each item serializes itself (faithful by
+    # construction — traces/bands/markers, capture descriptors, and metric style all round-trip now), and the
+    # ViewModelFactory reconstructs from the "type" tag. Fixes both the report JSON and persisted-run reload
+    # that previously dropped those fields. Unknown-type entries are skipped defensively. ---
     def toJson(self):
-        result = []
-        for item in self.getItems():
-            if isinstance(item, ColorSwatchView):
-                result.append({"type": "swatch", "rgb": list(item.rgb), "label": item.label})
-            elif isinstance(item, VerdictView):
-                result.append({"type": "verdict", "roastState": item.roastState,
-                               "hueDegrees": item.hueDegrees})
-            elif isinstance(item, MetricFieldView):
-                result.append({"type": "metric", "label": item.label, "value": item.value,
-                               "tooltip": item.tooltip})
-            elif isinstance(item, LabelView):
-                result.append({"type": "label", "text": item.text})
-            elif isinstance(item, SpectrumPlotView):
-                spectrum = item.spectrum
-                result.append({"type": "plot", "title": item.title,
-                               "values": spectrum.toJson() if spectrum is not None else {}})
-        return result
+        return [item.toJson() for item in self.getItems() if hasattr(item, "toJson")]
 
     def syncToColumn(self):
         self.resultJson = json.dumps(self.toJson())
@@ -68,17 +52,7 @@ class EvaluationResult(DbBaseEntity, DbBaseEntityMixin):
             obj = json.loads(obj)
         items = []
         for entry in obj:
-            kind = entry.get("type")
-            if kind == "swatch":
-                items.append(ColorSwatchView(tuple(entry["rgb"]), entry.get("label")))
-            elif kind == "verdict":
-                items.append(VerdictView(entry["roastState"], entry.get("hueDegrees")))
-            elif kind == "metric":
-                items.append(MetricFieldView(entry["label"], entry["value"], entry.get("tooltip")))
-            elif kind == "label":
-                items.append(LabelView(entry["text"]))
-            elif kind == "plot":
-                from sciens.spectracs.model.spectral.Spectrum import Spectrum
-                items.append(SpectrumPlotView(Spectrum().fromJson(entry.get("values", {})),
-                                              entry.get("title")))
+            view = ViewModelFactory.fromJson(entry)
+            if view is not None:
+                items.append(view)
         return items
