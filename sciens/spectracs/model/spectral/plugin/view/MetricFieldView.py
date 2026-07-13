@@ -8,23 +8,33 @@ class MetricFieldView(ReportableView):
     # SPEC_pumpkin_peak_ratio_eval.md §6). Qt-free plain data — the widgets live in QtWorkflowRenderer.
     # `style` (a MetricFieldViewStyle) is optional presentation the plugin attaches; the view-model only carries
     # it, it holds no styling logic of its own (SPEC_bench_small_screen_refinements.md S5).
+    #
+    # ‡ extended (SPEC_plugin_driven_convergence.md §3, 2026-07-13): optional `color` = a plain (r,g,b) tuple of
+    # 0-255 ints. When set, `value` is unused and the value cell renders a filled swatch (field-height) instead
+    # of the read-only text field — a labeled colour row that aligns in the same metric grid. Keeps colour out
+    # of a separate view-model so it shares the metric-grid alignment (the shape is identical; only the value
+    # cell differs). The plugin computes the colour (e.g. via EvaluationColorUtil).
 
-    def __init__(self, label, value, tooltip=None, style=None):
+    def __init__(self, label, value=None, tooltip=None, style=None, color=None):
         self.label = label
         self.value = value
         self.tooltip = tooltip
         self.style = style
+        self.color = tuple(color) if color is not None else None
 
-    # --- serialization (SPEC_bench_pdf_export.md §5, D2): round-trips the nested style (isLabelBold) too, so the
-    # report JSON and persisted-run reload no longer drop the bold-label flag. ---
+    # --- serialization (SPEC_bench_pdf_export.md §5, D2): round-trips the nested style (isLabelBold) and the
+    # optional colour too, so the report JSON and persisted-run reload no longer drop either. ---
     def toJson(self):
         return {"type": "metric", "label": self.label, "value": self.value, "tooltip": self.tooltip,
                 "style": self.style.toJson() if self.style is not None else None,
+                "color": list(self.color) if self.color is not None else None,
                 "isShownInReport": self.isShownInReport}
 
     @classmethod
     def fromJson(cls, entry):
-        view = cls(entry["label"], entry["value"], entry.get("tooltip"),
-                   MetricFieldViewStyle.fromJson(entry.get("style")))
+        color = entry.get("color")
+        view = cls(entry["label"], entry.get("value"), entry.get("tooltip"),
+                   MetricFieldViewStyle.fromJson(entry.get("style")),
+                   tuple(color) if color is not None else None)
         view.isShownInReport = entry.get("isShownInReport", False)
         return view
