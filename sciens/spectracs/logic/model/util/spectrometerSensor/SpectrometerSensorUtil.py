@@ -16,11 +16,14 @@ class SpectrometerSensorUtil(Singleton):
     # Good per-camera capture exposures, judged empirically against the light source and hard-coded HERE
     # (where the cameras are seeded), keyed by hardwareId = vendorId_modelId (SPEC_real_camera_capture.md
     # §4/§9.3, KB_spectroscopy_physics.md §7). calibrationExposure verified on the CFL line source:
-    # 78 is the highest value that keeps the ELP's green ~546 nm line unclipped (150 clipped blue+green
-    # and merged the whole red cluster). measurementExposure (LED array, ref+sample) is a separate regime,
-    # still TBD. None => backend legacy default (150 Linux).
+    # 150 at the pinned 2592x1944 capture (SPEC_capture_quality.md §4.9) — the sensor's inverted control
+    # means a HIGHER value is dimmer, so 150 is the non-bloomed level: it resolves the green ~546 nm
+    # doublet and keeps the ROI band tight. (The earlier 78 was tuned at the old, lower capture resolution,
+    # where each line spread over fewer pixels and clipped sooner; at 2592 that same 78 over-exposes and
+    # inflates the ROI vertical bounds with bloom.) measurementExposure (LED array, ref+sample) is a
+    # separate regime, still TBD. None => backend legacy default (150 Linux).
     __CAPTURE_SETTINGS_BY_HARDWARE_ID = {
-        '32e4_8830': SpectrometerSensorSettings(calibrationExposure=78, measurementExposure=None),   # ELP
+        '32e4_8830': SpectrometerSensorSettings(calibrationExposure=150, measurementExposure=None),  # ELP
         '0c45_6366': SpectrometerSensorSettings(calibrationExposure=None, measurementExposure=None),  # Microdia TBD
     }
 
