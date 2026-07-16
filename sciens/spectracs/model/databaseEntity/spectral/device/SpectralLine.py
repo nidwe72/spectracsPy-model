@@ -1,6 +1,6 @@
 from typing import ClassVar
 
-from PySide6.QtGui import QColor
+from sciens.spectracs.model.spectral.SpectralColor import SpectralColor
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy import Integer,String
 from sqlalchemy.orm import relationship
@@ -28,7 +28,7 @@ class SpectralLine(ServerDbBaseEntity, DbBaseEntityMixin):
     spectralLineMasterData = relationship("SpectralLineMasterData")
 
     #transient stuff follows
-    color:ClassVar[QColor]=None
+    color:ClassVar[SpectralColor]=None
 
     __prominence:ClassVar[float]=None
 
