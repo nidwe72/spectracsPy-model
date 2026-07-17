@@ -23,7 +23,7 @@ class UserSeedLogicModule:
     # The pumpkin demo plugin the master "authors" + the end-user configured to run it.
     PUMPKIN_PLUGIN = {
         "title": "Pumpkin-seed-oil colour QM",
-        "codeRef": "sciens.spectracs.logic.spectral.plugin.pumpkin.PumpkinOilPlugin.PumpkinOilPlugin",
+        "codeRef": "sciens.spectracs.plugins.pumpkin.PumpkinOilPlugin.PumpkinOilPlugin",
         "version": "1.0",
     }
     PUMPKIN_TEST_USER = ("pumpkinTestUser", "pumpkinTestUser", UserRoleType.END_USER)
