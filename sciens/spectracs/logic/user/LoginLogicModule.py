@@ -16,8 +16,8 @@ class LoginLogicModule:
         if appUser is None or not appUser.enabled or not PasswordUtil().verify(password, appUser.passwordHash):
             # Same generic message for unknown-user and wrong-password (don't leak account existence).
             return {"ok": False, "userId": None, "username": None, "roles": [], "registeredSerial": None,
-                    "pluginCodeRef": None, "spectrometerDevice": None, "calibration": None,
-                    "message": "invalid credentials"}
+                    "pluginCodeRef": None, "pluginVersion": None, "spectrometerDevice": None,
+                    "calibration": None, "message": "invalid credentials"}
 
         roles = persist.getRoleNamesForUser(appUser)
         # The instrument bundle travels with login so the client can "download" its device + calibration +
@@ -28,6 +28,7 @@ class LoginLogicModule:
         return {"ok": True, "userId": appUser.id, "username": appUser.username, "roles": roles,
                 "registeredSerial": appUser.registeredSerial,
                 "pluginCodeRef": bundle.get("pluginCodeRef") if ok else None,
+                "pluginVersion": bundle.get("pluginVersion") if ok else None,
                 "spectrometerDevice": bundle.get("deviceCodeName") if ok else None,
                 "calibration": bundle.get("calibration") if ok else None,
                 "message": None}

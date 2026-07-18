@@ -27,6 +27,10 @@ class InstrumentLogicModule:
         sensor = spectrometer.spectrometerSensor if spectrometer is not None else None
         deviceCodeName = sensor.codeName if sensor is not None else None
         pluginCodeRef = setup.plugin.codeRef if setup.plugin is not None else None
+        # B5.4: carry the EXACT bound version too — the client loads (codeRef, version), and resolve routes on
+        # the row's sealedness (a bare/seed row falls back to the built-in). Dropping the version here is the
+        # F5 bug that would shadow a distributed sealed row with the built-in.
+        pluginVersion = setup.plugin.version if setup.plugin is not None else None
 
         calibration = None
         cal = profile.spectrometerCalibrationProfile if profile is not None else None
@@ -45,7 +49,8 @@ class InstrumentLogicModule:
             }
 
         return {"ok": True, "serial": serial, "deviceCodeName": deviceCodeName,
-                "pluginCodeRef": pluginCodeRef, "calibration": calibration, "message": None}
+                "pluginCodeRef": pluginCodeRef, "pluginVersion": pluginVersion,
+                "calibration": calibration, "message": None}
 
     def __spectralLinesDto(self, cal):
         result = []

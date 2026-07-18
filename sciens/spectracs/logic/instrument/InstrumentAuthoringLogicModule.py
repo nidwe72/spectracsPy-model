@@ -92,14 +92,20 @@ class InstrumentAuthoringLogicModule:
             rebuilt.append(spectralLine)
         cal.spectralLines = rebuilt  # delete-orphan cascade drops any previous set
 
-    def saveSetup(self, serial: str, pluginCodeRef: str) -> dict:
+    def saveSetup(self, serial: str, pluginCodeRef: str, pluginVersion: str = None) -> dict:
         session = server_session_factory()
         profile = session.query(SpectrometerProfile).filter(SpectrometerProfile.serial == serial).first()
         if profile is None:
             return {"ok": False, "message": "no profile for serial '%s' — save the profile first" % serial}
-        plugin = session.query(DbPlugin).filter(DbPlugin.codeRef == pluginCodeRef).first()
+        # B5.3 (F4): key on the EXACT (codeRef, version) row when a version is given — post-B0 there are many
+        # rows per codeRef, so the old codeRef-only `.first()` bound an ARBITRARY version. A None version keeps
+        # the legacy codeRef-only bind for callers that don't pick a version.
+        query = session.query(DbPlugin).filter(DbPlugin.codeRef == pluginCodeRef)
+        if pluginVersion is not None:
+            query = query.filter(DbPlugin.version == pluginVersion)
+        plugin = query.first()
         if plugin is None:
-            return {"ok": False, "message": "unknown plugin '%s'" % pluginCodeRef}
+            return {"ok": False, "message": "unknown plugin '%s' %s" % (pluginCodeRef, pluginVersion or "")}
 
         setup = session.query(SpectrometerSetup).filter(
             SpectrometerSetup.spectrometerProfileId == profile.id).first()
@@ -127,5 +133,7 @@ class InstrumentAuthoringLogicModule:
         for s in session.query(SpectrometerSetup).all():
             serial = s.spectrometerProfile.serial if s.spectrometerProfile is not None else None
             pluginCodeRef = s.plugin.codeRef if s.plugin is not None else None
-            result.append({"id": s.id, "serial": serial, "pluginCodeRef": pluginCodeRef})
+            pluginVersion = s.plugin.version if s.plugin is not None else None
+            result.append({"id": s.id, "serial": serial, "pluginCodeRef": pluginCodeRef,
+                           "pluginVersion": pluginVersion})
         return result
