@@ -10,10 +10,11 @@ class MetricFieldView(ReportableView):
     # it, it holds no styling logic of its own (SPEC_bench_small_screen_refinements.md S5).
     #
     # ‡ extended (SPEC_plugin_driven_convergence.md §3, 2026-07-13): optional `color` = a plain (r,g,b) tuple of
-    # 0-255 ints. When set, `value` is unused and the value cell renders a filled swatch (field-height) instead
-    # of the read-only text field — a labeled colour row that aligns in the same metric grid. Keeps colour out
-    # of a separate view-model so it shares the metric-grid alignment (the shape is identical; only the value
-    # cell differs). The plugin computes the colour (e.g. via EvaluationColorUtil).
+    # 0-255 ints. The value cell then renders a filled swatch (field-height) — a labeled colour row that aligns in
+    # the same metric grid. The plugin computes the colour (e.g. via EvaluationColorUtil).
+    # ‡‡ extended (SPEC_color_retrieval.md, 2026-07-19): `color` and `value` may now BOTH be set — the value cell
+    # renders the swatch AND a read-only field side-by-side (a colour chip with its HSL text). Three render cases:
+    # color+value → swatch+field; color only → swatch; value only → field (see the renderers).
 
     def __init__(self, label, value=None, tooltip=None, style=None, color=None):
         self.label = label
