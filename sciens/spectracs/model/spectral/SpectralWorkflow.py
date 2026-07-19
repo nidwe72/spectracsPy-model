@@ -15,6 +15,7 @@ class SpectralWorkflow(DbBaseEntity, DbBaseEntityMixin):
     username = Column(String)
     userId = Column(String)
     pluginCodeRef = Column(String)
+    pluginVersion = Column(String)  # A3 provenance: the EXACT resolved plugin version; NULL -> shipped built-in
     timestampIso = Column(String)
 
     phases = relationship("SpectralWorkflowPhase", collection_class=attribute_keyed_dict('type'),
@@ -62,7 +63,8 @@ class SpectralWorkflow(DbBaseEntity, DbBaseEntityMixin):
             phases.append({"type": getattr(phaseType, "value", str(phaseType)), "steps": steps})
         return {
             "header": {"username": self.username, "userId": self.userId,
-                       "pluginCodeRef": self.pluginCodeRef, "timestampIso": self.timestampIso},
+                       "pluginCodeRef": self.pluginCodeRef, "pluginVersion": self.pluginVersion,
+                       "timestampIso": self.timestampIso},
             "phases": phases,
         }
 
