@@ -6,9 +6,10 @@ class GaugeRender(Flag):
     # there is NO `FULL` (Edwin 2026-07-23). Serialises as a stable list of lowercase names (D8-render), so the
     # persisted setup reads e.g. ["band","label","swatch"] in workflow.json.
     LABEL = auto()      # the verdict pill
-    BAND = auto()       # the gradient band + marker
+    BAND = auto()       # the gradient band + marker (+ threshold ticks)
     SWATCH = auto()     # the solid colour chip, with the value printed on it
     VALUE = auto()      # the numeric metric as standalone text
+    ZONES = auto()      # a coarse class-coloured zone bar (symbolic equal-width segments) + a zone marker
 
     def toNames(self):
         return [member.name.lower() for member in GaugeRender if member in self]
