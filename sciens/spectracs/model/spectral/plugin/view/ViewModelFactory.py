@@ -4,6 +4,7 @@ from sciens.spectracs.model.spectral.plugin.view.MetricFieldView import MetricFi
 from sciens.spectracs.model.spectral.plugin.view.SpectrumCaptureView import SpectrumCaptureView
 from sciens.spectracs.model.spectral.plugin.view.SpectrumPlotView import SpectrumPlotView
 from sciens.spectracs.model.spectral.plugin.view.VerdictView import VerdictView
+from sciens.spectracs.model.spectral.plugin.view.VerdictGaugeView import VerdictGaugeView
 
 
 class ViewModelFactory:
@@ -19,6 +20,7 @@ class ViewModelFactory:
         "verdict": VerdictView,
         "plot": SpectrumPlotView,
         "capture": SpectrumCaptureView,
+        "gauge": VerdictGaugeView,
     }
 
     @classmethod
