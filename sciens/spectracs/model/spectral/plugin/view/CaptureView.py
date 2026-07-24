@@ -11,11 +11,14 @@ class CaptureView:
 
     def __init__(self, prompt=None, captureLabel="Measure", showLivePreview=True, geometry=None,
                  showFramesControl=False, showExposureControls=False,
-                 wavelengthMinNm=None, wavelengthMaxNm=None):
+                 wavelengthMinNm=None, wavelengthMaxNm=None, croppedPreview=False):
         self.prompt = prompt                    # instruction shown to the user
         self.captureLabel = captureLabel        # Measure-button text
         self.showLivePreview = showLivePreview  # show the live camera feed
         self.geometry = geometry                # "transmission" | "reflection" (host may draw an overlay)
+        # SPEC_simplified_plugin_navigation.md §5 (Change A): show ONLY the cropped ROI strip in the live preview
+        # (default: the whole sensor frame with a dotted ROI box). Display-only; auto-exposure is unaffected.
+        self.croppedPreview = croppedPreview
         self.showFramesControl = showFramesControl        # show the frame-count dropdown (default hidden)
         self.showExposureControls = showExposureControls  # show the exposure slider + auto-exposure checkbox
         # SPEC_capture_quality.md §9 (M1) — the usable wavelength window this plugin's lamp actually illuminates.
@@ -36,4 +39,8 @@ class CaptureView:
 
     def setShowExposureControls(self, value=True):
         self.showExposureControls = value
+        return self
+
+    def setCroppedPreview(self, value=True):
+        self.croppedPreview = value
         return self
