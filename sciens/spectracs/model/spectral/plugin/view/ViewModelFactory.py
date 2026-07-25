@@ -3,6 +3,7 @@ from sciens.spectracs.model.spectral.plugin.view.LabelView import LabelView
 from sciens.spectracs.model.spectral.plugin.view.MetricFieldView import MetricFieldView
 from sciens.spectracs.model.spectral.plugin.view.SpectrumCaptureView import SpectrumCaptureView
 from sciens.spectracs.model.spectral.plugin.view.SpectrumPlotView import SpectrumPlotView
+from sciens.spectracs.model.spectral.plugin.view.TabGroupView import TabGroupView
 from sciens.spectracs.model.spectral.plugin.view.VerdictView import VerdictView
 from sciens.spectracs.model.spectral.plugin.view.VerdictGaugeView import VerdictGaugeView
 
@@ -21,6 +22,7 @@ class ViewModelFactory:
         "plot": SpectrumPlotView,
         "capture": SpectrumCaptureView,
         "gauge": VerdictGaugeView,
+        "tabgroup": TabGroupView,
     }
 
     @classmethod
