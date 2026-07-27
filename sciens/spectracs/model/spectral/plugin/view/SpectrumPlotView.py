@@ -8,12 +8,17 @@ class SpectrumPlotView(ReportableView):
     #   - overlay: SpectrumPlotView(title=...).addTrace(ref, "Reference", "c").addTrace(sample, "Sample", "y")
     #   - band annotations: pass bands=[(lo_nm, hi_nm, label), ...] (shaded vertical spans)
 
-    def __init__(self, spectrum=None, title=None, traces=None, bands=None, markers=None):
+    #   - axis="dn": the curves are RAW capture spectra in linear light; draw them on a camera-DN axis instead
+    #     (display-only inverse decode + the 16 DN guard line). SPEC_capture_quality.md §16.7.2e — a linear axis
+    #     hides the dim-but-healthy range in its bottom 4% and has already caused a mis-dilution. Use it for
+    #     REFERENCE/SAMPLE plots; NOT for absorbance or transmission, which are unitless ratios.
+    def __init__(self, spectrum=None, title=None, traces=None, bands=None, markers=None, axis=None):
         self.spectrum = spectrum   # primary curve (kept for existing single-spectrum callers)
         self.title = title
         self.traces = traces or []  # extra curves: (spectrum, label, color) tuples
         self.bands = bands or []    # measurement/annotation windows: (lo_nm, hi_nm, label) tuples
         self.markers = markers or []  # vertical annotation lines: (nm, label) tuples (e.g. the Q-peak)
+        self.axis = axis            # None = plot the values as given; "dn" = draw on a camera-DN axis
 
     def addTrace(self, spectrum, label=None, color=None):
         self.traces.append((spectrum, label, color))
@@ -44,6 +49,7 @@ class SpectrumPlotView(ReportableView):
                             "label": trace[1], "color": trace[2]} for trace in self.traces],
                 "bands": [list(band) for band in self.bands],
                 "markers": [list(marker) for marker in self.markers],
+                "axis": self.axis,
                 "isShownInReport": self.isShownInReport}
 
     @classmethod
@@ -52,7 +58,8 @@ class SpectrumPlotView(ReportableView):
         primary = Spectrum().fromJson(entry["spectrum"]) if entry.get("spectrum") is not None else None
         view = cls(primary, entry.get("title"),
                    bands=[tuple(band) for band in entry.get("bands", [])],
-                   markers=[tuple(marker) for marker in entry.get("markers", [])])
+                   markers=[tuple(marker) for marker in entry.get("markers", [])],
+                   axis=entry.get("axis"))
         for trace in entry.get("traces", []):
             view.addTrace(Spectrum().fromJson(trace.get("values", {})), trace.get("label"), trace.get("color"))
         view.isShownInReport = entry.get("isShownInReport", False)
