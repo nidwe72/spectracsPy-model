@@ -11,7 +11,8 @@ class CaptureView:
 
     def __init__(self, prompt=None, captureLabel="Measure", showLivePreview=True, geometry=None,
                  showFramesControl=False, showExposureControls=False,
-                 wavelengthMinNm=None, wavelengthMaxNm=None, croppedPreview=False):
+                 wavelengthMinNm=None, wavelengthMaxNm=None, croppedPreview=False,
+                 levels=None):
         self.prompt = prompt                    # instruction shown to the user
         self.captureLabel = captureLabel        # Measure-button text
         self.showLivePreview = showLivePreview  # show the live camera feed
@@ -27,6 +28,22 @@ class CaptureView:
         # every capture step of one workflow (Reference and Sample) or T=S/R would divide mismatched domains.
         self.wavelengthMinNm = wavelengthMinNm
         self.wavelengthMaxNm = wavelengthMaxNm
+        # SPEC_soret_448_trim.md §25.4 — horizontal guide lines for the LIVE capture preview, in exactly the
+        # same shape as SpectrumPlotView's: (value, lowNm, highNm, label, color, style, number). So the DN
+        # guard's value, caption, colour and style exist ONCE and the preview cannot drift from the report.
+        #
+        # ⭐ Why the capture shell carries display numbers at all: the DOSING DECISION IS MADE HERE. Guards on
+        # the evaluation plot and in the PDF protect nothing at the moment that matters, and leaving this panel
+        # with its own hard-coded 16 would have kept the most-read plot as the stale copy. These are
+        # measurement constants the plugin already owns (§16.23.8), not styling.
+        # ⚠ Read in DISPLAY DN, the space the live preview draws in. None => the host's legacy 16 DN line.
+        # ⚠ Declared PER STEP: §16.23.8 states the guard on min(S) after the SAMPLE capture, so the reference
+        # (a solvent blank judged against R ~ 88) declares none.
+        self.levels = levels or []
+
+    def addLevel(self, value, lowNm=None, highNm=None, label=None, color=None, style=None, number=None):
+        self.levels.append((value, lowNm, highNm, label, color, style, number))
+        return self
 
     def setWavelengthWindow(self, wavelengthMinNm, wavelengthMaxNm):
         self.wavelengthMinNm = wavelengthMinNm
