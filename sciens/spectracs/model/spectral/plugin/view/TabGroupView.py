@@ -37,7 +37,11 @@ class TabGroupView(ReportableView):
                           "views": [item.toJson() for item in (view if isinstance(view, list) else [view])
                                     if hasattr(item, "toJson")]}
                          for label, view in self.tabs],
-                "isShownInReport": self.isShownInReport}
+                "isShownInReport": self.isShownInReport,
+                # ⭐ §27.13c (D2): the host's monitor tag round-trips. Without it a run reloaded from the DB
+                # loses the tag, and re-measuring that role then APPENDS a second settling curve instead of
+                # replacing the first — two contradictory provenances for one number.
+                "isMonitorView": self.isMonitorView}
 
     @classmethod
     def fromJson(cls, entry):
@@ -54,4 +58,5 @@ class TabGroupView(ReportableView):
             if child is not None:
                 view.addTab(tab.get("label"), child)
         view.isShownInReport = entry.get("isShownInReport", False)
+        view.isMonitorView = entry.get("isMonitorView", False)   # §27.13c — absent in pre-D2 rows -> False
         return view

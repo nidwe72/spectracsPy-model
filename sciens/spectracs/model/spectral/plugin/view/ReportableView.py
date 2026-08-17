@@ -6,6 +6,14 @@ class ReportableView:
     # host's report renderer includes only items whose `isShownInReport` is True; the GUI ignores the flag.
     isShownInReport = False
 
+    # ⭐ SPEC_settled_measurement.md §27.12/§27.13c (D2) — set by the HOST on a view that documents ONE
+    # monitored capture, so re-measuring that role REPLACES the view instead of hanging a second, con-
+    # tradictory provenance off the same step. ⛔ A CLASS-LEVEL DEFAULT is required, not an attribute the
+    # engine invents: `toJson()` reads `self.isMonitorView` on views that were never tagged (the raster
+    # group), and without the default that is an AttributeError (§27.14/W2).
+    # ⚠ The flag is the HOST's, never the plugin's — a plugin returning a view says nothing about identity.
+    isMonitorView = False
+
     def setShownInReport(self, value=True):
         self.isShownInReport = value
         return self
