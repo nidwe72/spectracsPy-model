@@ -17,18 +17,26 @@ class TabGroupView(ReportableView):
         self.tabs = list(tabs) if tabs else []   # [(label, childView), ...]
 
     def addTab(self, label, view):
+        # ⭐ `view` may be a SINGLE view-model or a LIST of them (SPEC_settled_measurement.md §27.9): a tab
+        # whose content is a summary — a heading plus a column of metric rows — is several view-models, and
+        # forcing it into one would mean inventing a "summary view" that the metric grid already renders.
         self.tabs.append((label, view))
         return self
 
     def children(self):
-        return [view for _label, view in self.tabs]
+        flattened = []
+        for _label, view in self.tabs:
+            flattened.extend(view if isinstance(view, list) else [view])
+        return flattened
 
     # --- serialization (recurse children through the ViewModelFactory; imported lazily to avoid the factory ↔
     # view-model import cycle) ---
     def toJson(self):
         return {"type": "tabgroup",
-                "tabs": [{"label": label, "view": view.toJson()}
-                         for label, view in self.tabs if hasattr(view, "toJson")],
+                "tabs": [{"label": label,
+                          "views": [item.toJson() for item in (view if isinstance(view, list) else [view])
+                                    if hasattr(item, "toJson")]}
+                         for label, view in self.tabs],
                 "isShownInReport": self.isShownInReport}
 
     @classmethod
@@ -36,7 +44,13 @@ class TabGroupView(ReportableView):
         from sciens.spectracs.model.spectral.plugin.view.ViewModelFactory import ViewModelFactory
         view = cls()
         for tab in entry.get("tabs", []):
-            child = ViewModelFactory.fromJson(tab.get("view") or {})
+            if "views" in tab:           # multi-view tab (a summary column)
+                children = [ViewModelFactory.fromJson(item or {}) for item in tab.get("views") or []]
+                children = [child for child in children if child is not None]
+                if children:
+                    view.addTab(tab.get("label"), children if len(children) > 1 else children[0])
+                continue
+            child = ViewModelFactory.fromJson(tab.get("view") or {})   # legacy single-view form
             if child is not None:
                 view.addTab(tab.get("label"), child)
         view.isShownInReport = entry.get("isShownInReport", False)

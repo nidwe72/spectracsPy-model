@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Text
 from sqlalchemy.orm import relationship, reconstructor
 from sqlalchemy.orm.collections import attribute_keyed_dict
 
@@ -17,6 +17,17 @@ class SpectralWorkflow(DbBaseEntity, DbBaseEntityMixin):
     pluginCodeRef = Column(String)
     pluginVersion = Column(String)  # A3 provenance: the EXACT resolved plugin version; NULL -> shipped built-in
     timestampIso = Column(String)
+    # SPEC_settled_measurement.md §15.2 — the monitored acquisition's own record: outcome, branch, how the
+    # answer was read, the clearing time, the DECISION ROWS, and the policy + evaluator version it ran
+    # under. NULL for every plain-burst capture, which is most of them.
+    #
+    # ⭐ ONE TEXT COLUMN, holding the plugin's SELF-DESCRIBING structure (`columns` + `rows` + `answer`).
+    # ⛔ Not a table of typed columns: `qPercent / soret / valley / qBand` would hard-code one plugin's
+    # physics into the app's schema — the exact mistake §10.1a-bis removed from the SDK, and the reason
+    # §15.2 insists the host know only `t` and `answer["valueKey"]`.
+    # ⚠ Rows are a JSON LIST of objects with `t` as a VALUE, never a map keyed by a float: JSON turns
+    # float keys into strings on the way back (SPEC_workflow_persistence.md's float-key gotcha).
+    monitorRecordJson = Column(Text)
 
     phases = relationship("SpectralWorkflowPhase", collection_class=attribute_keyed_dict('type'),
                           cascade="all, delete-orphan", back_populates="workflow")
@@ -31,6 +42,22 @@ class SpectralWorkflow(DbBaseEntity, DbBaseEntityMixin):
     @reconstructor
     def __initTransient(self):
         self.currentPhase = None
+
+    def getMonitorRecord(self):
+        # SPEC_settled_measurement.md §15.2 — the settling trajectory as the plugin declared it, or None
+        # for a plain-burst capture. Parsed lazily: most runs never look at it.
+        import json
+        if not self.monitorRecordJson:
+            return None
+        try:
+            return json.loads(self.monitorRecordJson)
+        except (TypeError, ValueError):
+            return None
+
+    def setMonitorRecord(self, record):
+        # ⚠ `record` is MonitorResult.toRecord() — plain JSON-able types only, rows as a LIST.
+        import json
+        self.monitorRecordJson = None if record is None else json.dumps(record)
 
     def getPhases(self): return self.phases
     def setPhases(self, phases):
