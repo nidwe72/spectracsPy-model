@@ -92,6 +92,11 @@ class SpectralWorkflow(DbBaseEntity, DbBaseEntityMixin):
             "header": {"username": self.username, "userId": self.userId,
                        "pluginCodeRef": self.pluginCodeRef, "pluginVersion": self.pluginVersion,
                        "timestampIso": self.timestampIso},
+            # ⭐ HOW THE VALUE WAS CHOSEN travels with the document (SPEC_settled_measurement.md §15.2 /
+            # §27.11). Without it a PDF from a monitored run carried the answer but not the trajectory,
+            # the gate's own numbers, or the policy the run was made under — and §5's promise is
+            # "complete provenance, raw acquisition through verdict". None for a plain-burst capture.
+            "monitorRecord": self.getMonitorRecord(),
             "phases": phases,
         }
 

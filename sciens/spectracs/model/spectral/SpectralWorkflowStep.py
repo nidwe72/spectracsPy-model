@@ -16,6 +16,13 @@ class SpectralWorkflowStep(DbBaseEntity, DbBaseEntityMixin):
     frames = Column(Integer)
     mandatory = Column(Boolean, default=False)
     persist = Column(Boolean, default=False)
+    # ⭐ REPORT-ONLY (SPEC_settled_measurement.md §27.11): the step exists in the workflow so the report
+    # collector finds its flagged views, but NO host draws a tab for it. Born from the settling summary,
+    # which belongs in the PDF as provenance yet must not reappear as a PROCESSING tab — the operator
+    # reads it under Sample, where the measurement happened.
+    # ⚠ PERSISTED, not transient: a saved run reloads its steps from the DB without re-running the plugin
+    # hook, so a transient flag would come back False and the step would sprout a tab on reopen.
+    reportOnly = Column(Boolean, default=False)
 
     container = relationship("SpectraContainer", uselist=False, back_populates="producedBy",
                              cascade="all, delete-orphan")
@@ -51,6 +58,10 @@ class SpectralWorkflowStep(DbBaseEntity, DbBaseEntityMixin):
     def setWidget(self, widget): self._widget = widget
     def getPersist(self): return self.persist
     def setPersist(self, persist): self.persist = persist
+    def isReportOnly(self): return bool(self.reportOnly)
+    def setReportOnly(self, reportOnly):
+        self.reportOnly = bool(reportOnly)
+        return self
     def getRole(self): return self.role
     def setRole(self, role): self.role = role
     def getLabel(self): return self.label
