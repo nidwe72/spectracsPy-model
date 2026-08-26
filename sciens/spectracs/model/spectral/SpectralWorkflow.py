@@ -56,6 +56,13 @@ class SpectralWorkflow(DbBaseEntity, DbBaseEntityMixin):
     @reconstructor
     def __initTransient(self):
         self.currentPhase = None
+        # ⭐ TRANSIENT, NOT PERSISTED — deliberately, and for the reason `captureDecode` is injected into
+        # the header rather than given a column: THE REPORT IS THE TRAVELLING RECORD. A provenance stamp
+        # that rides in workflow.json needs no schema change and no Alembic revision, and re-opening a
+        # saved run reconstructs it as UNKNOWN, which is the honest answer for a run made before the
+        # field existed.
+        self.solvent = None
+        self.prepProtocol = None
 
     def getMonitorRecord(self):
         # SPEC_settled_measurement.md §15.2 — the settling trajectory as the plugin declared it, or None
@@ -126,7 +133,10 @@ class SpectralWorkflow(DbBaseEntity, DbBaseEntityMixin):
         return {
             "header": {"username": self.username, "userId": self.userId,
                        "pluginCodeRef": self.pluginCodeRef, "pluginVersion": self.pluginVersion,
-                       "timestampIso": self.timestampIso},
+                       "timestampIso": self.timestampIso,
+                       # ⭐ Plain strings, so -model gains no dependency on the SDK enum.
+                       "solvent": getattr(self, "solvent", None) or "UNKNOWN",
+                       "prepProtocol": getattr(self, "prepProtocol", None)},
             # ⭐ HOW THE VALUE WAS CHOSEN travels with the document (SPEC_settled_measurement.md §15.2 /
             # §27.11). Without it a PDF from a monitored run carried the answer but not the trajectory,
             # the gate's own numbers, or the policy the run was made under — and §5's promise is
