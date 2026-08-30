@@ -63,6 +63,14 @@ class SpectralWorkflow(DbBaseEntity, DbBaseEntityMixin):
         # field existed.
         self.solvent = None
         self.prepProtocol = None
+        # ⭐ The exposure the camera ACTUALLY applied, read back per capture and written by `CapturePanel`
+        # (SPEC_capture_quality.md §16.39.5). Transient for the same reason as the two above: the report is
+        # the travelling record, so this needs no column and no Alembic revision, and a run re-opened from
+        # before the field existed honestly reports nothing.
+        # ⛔ NOT set in `SpectralWorkflowEngine.__buildWorkflow` beside `solvent`/`prepProtocol`: those are
+        # DECLARATIONS, true at construction. This is a MEASUREMENT, known only after a capture — and
+        # stamping an intention as if it were a measurement is the defect §16.39 is about.
+        self.exposureApplied = None
 
     def getMonitorRecord(self):
         # SPEC_settled_measurement.md §15.2 — the settling trajectory as the plugin declared it, or None
@@ -136,7 +144,8 @@ class SpectralWorkflow(DbBaseEntity, DbBaseEntityMixin):
                        "timestampIso": self.timestampIso,
                        # ⭐ Plain strings, so -model gains no dependency on the SDK enum.
                        "solvent": getattr(self, "solvent", None) or "UNKNOWN",
-                       "prepProtocol": getattr(self, "prepProtocol", None)},
+                       "prepProtocol": getattr(self, "prepProtocol", None),
+                       "exposureApplied": getattr(self, "exposureApplied", None)},
             # ⭐ HOW THE VALUE WAS CHOSEN travels with the document (SPEC_settled_measurement.md §15.2 /
             # §27.11). Without it a PDF from a monitored run carried the answer but not the trajectory,
             # the gate's own numbers, or the policy the run was made under — and §5's promise is
