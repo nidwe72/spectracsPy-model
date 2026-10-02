@@ -12,6 +12,7 @@ model tree and fails (naming the table) if any DbBaseEntity/ServerDbBaseEntity s
 # --- app DB (DbBaseEntity) ---
 from sciens.spectracs.model.databaseEntity.application import ApplicationConfig  # noqa: F401
 from sciens.spectracs.model.databaseEntity.application import ApplicationConfigToSpectrometerProfile  # noqa: F401
+from sciens.spectracs.model.databaseEntity.application import LampPlug  # noqa: F401
 # The model.spectral workflow graph — also DbBaseEntity / app-DB tables (SPEC_schema_migrations.md §8).
 from sciens.spectracs.model.spectral import SpectralWorkflow  # noqa: F401
 from sciens.spectracs.model.spectral import SpectralWorkflowPhase  # noqa: F401
