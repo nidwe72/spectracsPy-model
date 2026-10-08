@@ -15,6 +15,7 @@ import os
 
 from alembic import command
 from alembic.config import Config
+from alembic.runtime.migration import MigrationContext
 from alembic.script import ScriptDirectory
 from sqlalchemy import inspect
 
@@ -52,3 +53,19 @@ def initAppDatabase() -> None:
 
 def initServerDatabase() -> None:
     _init(serverEngine, ServerDbBaseEntity.metadata, "server")
+
+
+def getAppScriptHead() -> str:
+    """Head revision of the app's Alembic script tree as bundled here (the build compares it with the -model tree's
+    head; SPEC_windows_build.md D9)."""
+    return ScriptDirectory.from_config(_config("app")).get_current_head()
+
+
+def getAppDatabaseRevision() -> str:
+    """Revision stamped in the app DB's alembic_version (None before initAppDatabase)."""
+    with appEngine.connect() as connection:
+        return MigrationContext.configure(connection).get_current_revision()
+
+
+def getAppDatabasePath() -> str:
+    return appEngine.url.database
